@@ -1,0 +1,31 @@
+---
+homarus:
+  executable: "/usr/bin/ffmpeg"
+  mime_types:
+    valid:
+    - video/mp4
+    - video/x-msvideo
+    - video/ogg
+    - audio/x-wav
+    - audio/mpeg
+    - audio/aac
+    - image/jpeg
+    default: video/mp4
+  mime_to_format:
+    valid:
+    - video/mp4_mp4
+    - video/x-msvideo_avi
+    - video/ogg_ogg
+    - audio/x-wav_wav
+    - audio/mpeg_mp3
+    - audio/aac_m4a
+    - image/jpeg_image2pipe
+    default: mp4
+fedora_resource:
+  base_url: http://localhost:8080/fcrepo/rest
+log:
+  level: DEBUG
+  file: "/var/log/crayfish/homarus.log"
+syn:
+  enable: true
+  config: "/opt/www/crayfish/syn-settings.xml"

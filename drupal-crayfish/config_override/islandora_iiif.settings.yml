@@ -1,0 +1,2 @@
+---
+iiif_server: http://${FQDN}/iiif/2
