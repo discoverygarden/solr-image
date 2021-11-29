@@ -88,8 +88,7 @@ RUN mkdir -p /opt/www/drupal \
 USER composer
 
 RUN composer config -g http-basic.repo.packagist.com puppet-insecure-dgi ${PACKAGIST_TOKEN} \
-  && composer config -g preferred-install.'drupal/*' 'dist' \
-  && composer config -g preferred-install.'*' 'source'
+  && composer config -g preferred-install.'*' 'dist'
 
 RUN cd /opt/www/drupal \
   && composer install --no-interaction \

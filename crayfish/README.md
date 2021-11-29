@@ -1,0 +1,5 @@
+# README
+
+- Requires the `id_rsa` (added to .gitignore of repo) of **composer**  (file listed in .gitignore so not to be added by accident, but needs to be provider by user when building image)
+
+- `config_override/clamav.settings.yml` not being used at the moment

@@ -18,7 +18,7 @@
     <bundle>mvn:ca.islandora.alpaca/islandora-connector-derivative/1.0.3</bundle>
 
     <config name="org.fcrepo.camel.service.activemq">
-      jms.brokerUrl=tcp://localhost:61616
+      jms.brokerUrl=tcp://${ACTIVEMQ_HOST}:61616
     </config>
   </feature>
 </features>

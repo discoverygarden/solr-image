@@ -1,0 +1,10 @@
+---
+hypercube:
+  tesseract_executable: "/usr/bin/tesseract"
+  pdftotext_executable: "/usr/bin/pdftotext"
+log:
+  level: DEBUG
+  file: "/var/log/crayfish/hypercube.log"
+syn:
+  enable: true
+  config: "/opt/www/crayfish/syn-settings.xml"
