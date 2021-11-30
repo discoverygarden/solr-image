@@ -4,7 +4,7 @@ ENV COMPOSER_HOME=/home/composer
 ENV PACKAGIST_TOKEN=d415b8ea82b6c15e3215033e9e0269f384efe7e77f18cfa1d58efe86434e
 ENV CRAYFISH_GIT_REF=937e394ebfd585aa53a561a839438a739f2ab715
 
-EXPOSE 8888 9000
+EXPOSE 80 8888
 
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
@@ -30,7 +30,8 @@ RUN ln -s /etc/php/7.4/dgi/99-config.ini /etc/php/7.4/apache2/conf.d/99-config.i
 # setup apache2
 RUN echo 'ErrorLog /dev/stderr' >> /etc/apache2/apache2.conf \
   && echo 'TransferLog /dev/stdout' >> /etc/apache2/apache2.conf \
-  && echo 'CustomLog /dev/stdout combined' >> /etc/apache2/apache2.conf
+  && echo 'CustomLog /dev/stdout combined' >> /etc/apache2/apache2.conf \
+  && chown -R www-data /var/log/apache2
 
 # disable and enable sites
 #RUN a2dissite default-ssl.conf \
@@ -42,6 +43,10 @@ RUN a2enmod rewrite \
   && a2enmod ssl \
   && a2enmod proxy_http \
   && a2enmod headers 
+
+# setup Forensic logging (for debugging)
+#RUN a2enmmod log_forensic \
+#  && echo echo 'ForensicLog /dev/stdout' >> /etc/apache2/apache2.conf
 
 
 RUN useradd composer -g www-data -m \
@@ -59,14 +64,15 @@ RUN chmod 600 /home/composer/.ssh/id_rsa \
 #--------------------------------------------------------------
 # setup crayfish
 
-# JWT for crayfish
+# JWT for crayfish (but realistically, you would mount your actual keys over these)
 RUN mkdir -p /opt/drupal_keys/default/keys/ \
   && openssl genrsa -out /opt/drupal_keys/default/keys/default.key 2048 \
   && openssl rsa -pubout -in /opt/drupal_keys/default/keys/default.key -out /opt/drupal_keys/default/keys/default.pub \
   && chown -R www-data:www-data /opt/drupal_keys/
 
 
-RUN mkdir -p /opt/www \
+RUN mkdir -p /opt/www /var/log/crayfish \
+  && chown -R www-data /var/log/crayfish \
   && cd /opt/www/ \
   && git clone https://github.com/Islandora/Crayfish.git crayfish \
   && cd crayfish \

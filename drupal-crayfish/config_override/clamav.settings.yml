@@ -1,5 +1,0 @@
----
-scan_mode: 1
-mode_executable:
-  executable_path: "/usr/bin/clamdscan"
-  executable_parameters: "--fdpass"
