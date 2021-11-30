@@ -72,6 +72,7 @@ RUN mkdir -p /opt/drupal_keys/default/keys/ \
   && chown -R www-data:www-data /opt/drupal_keys/
 
 
+# /var/log/crayfish directory required for Homarus and Hypercube to work
 RUN mkdir -p /opt/www /var/log/crayfish \
   && chown -R www-data /var/log/crayfish \
   && cd /opt/www/ \
