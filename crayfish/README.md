@@ -6,3 +6,8 @@
 
 ## To run
 - `docker run -d --name crayfish_svc --env-file=apache2_envvars -v /opt/drupal_keys/:/opt/drupal_keys/ -p 8888:80 crayfish:VERSION`
+
+
+# TODO
+- generation of thumbnail for PDF document currently does not work
+- some Apache2 logging not going to stdout/stderr
