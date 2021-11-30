@@ -21,6 +21,8 @@ homarus:
     - audio/aac_m4a
     - image/jpeg_image2pipe
     default: mp4
+fedora_resource:
+  base_url: http://localhost:8080/fcrepo/rest
 log:
   level: DEBUG
   file: "/var/log/crayfish/homarus.log"

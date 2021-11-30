@@ -2,7 +2,8 @@ FROM debian:11-slim
 
 ENV COMPOSER_HOME=/home/composer
 ENV PACKAGIST_TOKEN=d415b8ea82b6c15e3215033e9e0269f384efe7e77f18cfa1d58efe86434e
-ENV CRAYFISH_GIT_REF=937e394ebfd585aa53a561a839438a739f2ab715
+#ENV CRAYFISH_GIT_REF=937e394ebfd585aa53a561a839438a739f2ab715
+ENV CRAYFISH_VERSION=1.1.1
 
 EXPOSE 80 8888
 
@@ -76,7 +77,7 @@ RUN mkdir -p /opt/www /var/log/crayfish \
   && cd /opt/www/ \
   && git clone https://github.com/Islandora/Crayfish.git crayfish \
   && cd crayfish \
-  && git checkout ${CRAYFISH_GIT_REF}
+  && git checkout ${CRAYFISH_VERSION}
 
 COPY configs/Homarus_cfg_config.yaml /opt/www/crayfish/Homarus/cfg/config.yaml
 COPY configs/Houdini_config_packages_crayfish_commons.yaml /opt/www/crayfish/Houdini/config/packages/crayfish_commons.yaml

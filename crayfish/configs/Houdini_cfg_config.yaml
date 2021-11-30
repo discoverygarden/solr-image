@@ -8,6 +8,8 @@ houdini:
     - image/tiff
     - image/jp2
     default: image/jpeg
+fedora_resource:
+  base_url: http://localhost:8080/fcrepo/rest
 log:
   level: DEBUG
   file: "/var/log/crayfish/houdini.log"
