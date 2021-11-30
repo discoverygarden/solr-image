@@ -110,12 +110,6 @@ RUN chown -R www-data:www-data /opt/www/crayfish \
 
 
 #--------------------------------------------------------------
-# drush
-
-RUN ln -s /opt/www/drupal/vendor/bin/drush /usr/bin/drush
-
-
-#--------------------------------------------------------------
 
 USER root 
 

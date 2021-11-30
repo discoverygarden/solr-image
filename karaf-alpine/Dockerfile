@@ -1,5 +1,5 @@
 # https://github.com/apache/karaf/blob/main/assemblies/docker/Dockerfile
-FROM alpine:3.14.2
+FROM alpine:3.14
 
 ENV OPENJDK_VERSION=11
 ENV KARAF_VERSION=4.2.11

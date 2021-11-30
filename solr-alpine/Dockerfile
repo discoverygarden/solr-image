@@ -1,5 +1,5 @@
 # https://solr.apache.org/guide/8_9/taking-solr-to-production.html
-FROM alpine:3.14.2
+FROM alpine:3.14
 
 ENV OPENJDK_VERSION=11
 ENV SOLR_VERSION=8.9.0
