@@ -1,0 +1,14 @@
+APACHE_RUN_DIR=/var/www/html
+APACHE_RUN_USER=www-data
+APACHE_RUN_GROUP=www-data
+APACHE_PID_FILE=/var/run/apache2/apache2.pid
+APACHE_RUN_DIR=/var/run/apache2
+APACHE_LOCK_DIR=/var/lock/apache2
+APACHE_LOG_DIR=/var/log/apache2
+LANG=C
+
+
+DRUPAL_DB_NAME=drupal
+DRUPAL_DB_USER=drupal
+DRUPAL_DB_PASSWORD=drupal
+POSTGRES_HOST=localhost
