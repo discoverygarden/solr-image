@@ -65,6 +65,8 @@ services:
     image: cantaloupe:4.1.9-tomcat
     ports:
     - 8080:8080
+    environment:
+    - TOMCAT_MEM="1g"
     volumes:
     - ${PWD}/actual.info.yaml:/opt/cantaloupe_configs/info.yaml
 secrets:
