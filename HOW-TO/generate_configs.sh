@@ -20,6 +20,7 @@ envsubst '${FQDN}' < drupal/conf-available/25-crayfish-hypercube.conf > actual.2
 # drupal - /opt/www/drupal/sites/default
 envsubst < drupal/drupal_sites_default/flysystem_config.json > actual.flysystem_config.json
 envsubst < drupal/drupal_sites_default/trusted_hosts.json > actual.trusted_hosts.json
+envsubst '${DRUPAL_DB_NAME} ${DRUPAL_DB_USER} ${DRUPAL_DB_PASSWORD} ${POSTGRES_HOST}' < drupal/drupal_sites_default/settings.php > actual.settings.php
 
 # drupal - /opt/www/drupal/sites/default/config_override
 envsubst < drupal/config_override/openseadragon.settings.yml > actual.openseadragon.settings.yml
