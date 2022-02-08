@@ -162,6 +162,16 @@ RUN mkdir -p /opt/islandora_data/repo-meta \
   && chown -R www-data:www-data /opt/drupal_private_filesystems \
   && chmod -R 770 /opt/drupal_private_filesystems
 
+COPY i8-specific-2021-05-18.tar.gz /tmp/i8-specific-2021-05-18.tar.gz
+COPY provisioned_content-2021-05-10.tar.gz /tmp/provisioned_content-2021-05-10.tar.gz
+RUN mkdir -p /opt/www/drupal/sites/default \
+  && tar -zxvf /tmp/i8-specific-2021-05-18.tar.gz -C /opt/www/drupal/sites/default/ \
+  && tar -zxvf /tmp/provisioned_content-2021-05-10.tar.gz -C /opt/www/drupal/sites/default/ \
+  && chmod -R 644 /opt/www/drupal/sites/default/provisioned_content* \
+  && chmod -R 644 /opt/www/drupal/sites/default/i8-specific* \
+  && chown -R www-data:www-data /opt/www/drupal \
+  && rm /tmp/i8-specific-2021-05-18.tar.gz /tmp/provisioned_content-2021-05-10.tar.gz
+
 COPY drupal_sites_default/*.php /opt/www/drupal/sites/default/
 COPY drupal_sites_default/*.json /opt/www/drupal/sites/default/
 
@@ -221,13 +231,15 @@ RUN chown -R www-data:www-data /opt/www/crayfish \
 #--------------------------------------------------------------
 # d8 config
 #
-# NOTE: these files should be mounted, so we only need to 
-#       ensure the paths exist and ownership is correct
 
 USER root 
 
+COPY i8-proto-config_i8manage.tar /tmp/i8-proto-config_i8manage.tar
 RUN mkdir -p /opt/www/drupal/sites/default/ /opt/www/d8_configs/ \
-  && chown -R www-data:www-data /opt/www/drupal /opt/www/d8_configs
+  && tar -xvf /tmp/i8-proto-config_i8manage.tar -C /opt/www/d8_configs/ \
+  && mv /opt/www/d8_configs/i8-proto-config /opt/www/d8_configs/default \
+  && chown -R www-data:www-data /opt/www/drupal /opt/www/d8_configs \
+  && rm /tmp/i8-proto-config_i8manage.tar
 
 
 #--------------------------------------------------------------

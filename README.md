@@ -83,17 +83,8 @@ sudo systemctl start clamav-daemon
 ```
 
 
-## Configs
-`source islandora-install.properties`
-
-use `envsubst < INPUT_FILE > OUTPUT_FILE`
-
-i.e. `envsubst < info.yaml > cantaloupe.info.yaml`
-
-**IMPORTANT** - don't do this for settings.php as there are a lot of PHP variables in there that end up getting wiped because they're in the same format as $SHELL_VARS
-
-
 ### d8_configs
+**NOTE:** this is built into the image now
 ```
 sudo mkdir -p /opt/www/drupal/sites/default
 sudo tar -zxvf provisioned_content-2021-05-10.tar.gz -C /opt/www/drupal/sites/default/
