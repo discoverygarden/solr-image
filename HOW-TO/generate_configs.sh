@@ -10,6 +10,13 @@ envsubst < cantaloupe/info.yaml > actual.info.yaml
 # drupal - /etc/apache2/sites-available
 envsubst < drupal/sites-available/25-80-dgi.conf > actual.25-80-dgi.conf
 
+# drupal - /etc/apache2/conf-available
+# NOTE: passing in '${FQDN}' so it it *only* substitutes that variable
+#       otherwise it will try to substitute the $1 in the conf as well
+envsubst '${FQDN}' < drupal-crayfish/conf-available/25-crayfish-homarus.conf > actual.25-crayfish-homarus.conf
+envsubst '${FQDN}' < drupal-crayfish/conf-available/25-crayfish-houdini.conf > actual.25-crayfish-houdini.conf
+envsubst '${FQDN}' < drupal-crayfish/conf-available/25-crayfish-hypercube.conf > actual.25-crayfish-hypercube.conf
+
 # drupal - /opt/www/drupal/sites/default
 envsubst < drupal/drupal_sites_default/flysystem_config.json > actual.flysystem_config.json
 envsubst < drupal/drupal_sites_default/trusted_hosts.json > actual.trusted_hosts.json

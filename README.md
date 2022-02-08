@@ -1,6 +1,16 @@
 # docker-dgi-proto
 Prototype docker setup for Islandora8
 
+## Building the Images
+```
+docker build -t [IMAGE_NAME]:[IMAGE_TAG] .
+```
+
+i.e. `docker build -t cantaloupe:4.1.9-tomcat .` from the `tomcat-cantaloupe` directory
+
+NOTE: the if you want to name/tag the images differently, don't forget to update the docker-compose.yaml ;)
+
+
 ## Pre-requisites
 
 ### Docker (for [Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
