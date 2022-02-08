@@ -33,6 +33,8 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 
 - Optional: `sudo usermod -a -G docker ubuntu`
 
+### docker-compose
+See documentation [here](https://docs.docker.com/compose/install/#install-compose-on-linux-systems)
 
 ### PostgreSQL
 ```
@@ -57,6 +59,7 @@ sudo systemctl restart postgresql
 ```
 
 ### ClamAV
+** ATTENTION ** - ClamAV needs to be disabled in the containerized version.  There may be [potential workarounds](https://hub.docker.com/r/mkodockx/docker-clamav) but the needs exploring/testing
 ```
 sudo apt-get -y install clamav-daemon
 
@@ -84,7 +87,7 @@ sudo systemctl start clamav-daemon
 
 
 ### d8_configs
-**NOTE:** this is built into the image now
+**DEPRECATION NOTE:** this is built into the image now as of v0.1.0 of drupal-crayfish image
 ```
 sudo mkdir -p /opt/www/drupal/sites/default
 sudo tar -zxvf provisioned_content-2021-05-10.tar.gz -C /opt/www/drupal/sites/default/
@@ -98,29 +101,4 @@ sudo mkdir -p /opt/www/d8_configs
 sudo tar -xvf i8-proto-config_i8manage.tar -C /opt/www/d8_configs/
 sudo mv /opt/www/d8_configs/i8-proto-config /opt/www/d8_configs/default
 sudo chown -R www-data:www-data /opt/www/d8_configs
-```
-
-
-# Initializing (first time only)
-- run all the containers
-- enter Drupal container
-- run from **/opt/www/drupal/sites/default**
-```
-export DRUPAL_USER=islandora
-export DRUPAL_USER_PASS=islandora
-export DRUPAL_SITE_EMAIL=noreplysys@discoverygarden.ca
-
-sudo -u www-data drush site-install minimal --db-url=pgsql://$DRUPAL_DB_USER:$DRUPAL_DB_PASSWORD@$POSTGRES_HOST:5432/$DRUPAL_DB_NAME --site-name=default_site --account-name=$DRUPAL_USER --account-pass=$DRUPAL_USER_PASS --account-mail=$DRUPAL_SITE_EMAIL --sites-subdir=default --existing-config
-
-drush content-sync:import provisioned_content --actions=create --user=1
-drush content-sync:import i8-specific --actions=create --user=1
-drush -y migrate:import --userid=1 --group=islandora
-
-drush -y state-set dgi_i8_helper_iiif_site_id ${FQDN}_d8_default
-```
-
-- run from **/opt/www/drupal**
-```
-drush cr
-drush updb
 ```

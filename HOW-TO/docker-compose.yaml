@@ -32,9 +32,9 @@ services:
     - DRUPAL_DB_USER=drupal
     - DRUPAL_DB_PASSWORD=/run/secrets/db-password
     volumes:
-    - /opt/www/d8_configs/default/:/opt/www/d8_configs/default/
-    - /opt/www/drupal/sites/default/provisioned_content/:/opt/www/drupal/sites/default/provisioned_content/
-    - /opt/www/drupal/sites/default/i8-specific/:/opt/www/drupal/sites/default/i8-specific/
+#    - /opt/www/d8_configs/default/:/opt/www/d8_configs/default/
+#    - /opt/www/drupal/sites/default/provisioned_content/:/opt/www/drupal/sites/default/provisioned_content/
+#    - /opt/www/drupal/sites/default/i8-specific/:/opt/www/drupal/sites/default/i8-specific/
     - ${PWD}/actual.25-crayfish-homarus.conf:/etc/apache2/conf-available/25-crayfish-homarus.conf
     - ${PWD}/actual.25-crayfish-houdini.conf:/etc/apache2/conf-available/25-crayfish-houdini.conf
     - ${PWD}/actual.25-crayfish-hypercube.conf:/etc/apache2/conf-available/25-crayfish-hypercube.conf
