@@ -14,7 +14,7 @@
     <cm:default-properties>
       <cm:property name="error.maxRedeliveries" value="5"/>
       <cm:property name="in.stream" value="broker:queue:islandora-connector-hypercube"/>
-      <cm:property name="derivative.service.url" value="http://${CRAYFISH_HOST}/hypercube"/>
+      <cm:property name="derivative.service.url" value="http://${FQDN}/hypercube"/>
     </cm:default-properties>
   </cm:property-placeholder>
 
