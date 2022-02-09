@@ -1,6 +1,7 @@
 export FQDN=$(curl -s ipinfo.io/ip)
 export ACTIVEMQ_HOST=$(curl -s ipinfo.io/ip)
 export CRAYFISH_HOST=$(curl -s ipinfo.io/ip)
+export PRIVATE_IP=$(hostname -I | awk '{print $1}')
 
 source ./islandora-install.properties
 

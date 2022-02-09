@@ -14,7 +14,7 @@
     <cm:default-properties>
       <cm:property name="error.maxRedeliveries" value="5"/>
       <cm:property name="in.stream" value="broker:queue:islandora-connector-homarus"/>
-      <cm:property name="derivative.service.url" value="http://${FQDN}/homarus/convert"/>
+      <cm:property name="derivative.service.url" value="http://${CRAYFISH_HOST}/homarus/convert"/>
     </cm:default-properties>
   </cm:property-placeholder>
 
