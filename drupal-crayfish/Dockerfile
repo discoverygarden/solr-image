@@ -249,6 +249,12 @@ RUN ln -s /opt/www/drupal/vendor/bin/drush /usr/bin/drush
 
 
 #--------------------------------------------------------------
+# cleanup
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+
+
+#--------------------------------------------------------------
 
 USER root 
 
