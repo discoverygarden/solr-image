@@ -30,7 +30,7 @@ listen_addresses = '*'          # what IP address(es) to listen on;
 
 
 ## To deploy 
-- run `generate_configs.sh` to create "actual" configs which will be mounted over the defaults in the Docker image
+- run `generate_configs.sh` to create "actual" configs which will be mounted over the defaults in the Docker image AND the docker-compose.yaml file itself (POSTGRES_HOST = VM private IP)
 - `docker-compose up -d`
 
 # Initializing (first time only)
