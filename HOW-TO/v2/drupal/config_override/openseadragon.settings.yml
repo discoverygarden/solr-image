@@ -1,0 +1,2 @@
+---
+iiif_server: http://${CANTALOUPE_IP}/iiif/2

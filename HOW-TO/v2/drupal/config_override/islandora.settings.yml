@@ -1,0 +1,4 @@
+broker_url: 'tcp://${ACTIVEMQ_IP}:61613'
+jwt_expiry: '+1 day'
+gemini_url: ''
+gemini_pseudo_bundles: {  }

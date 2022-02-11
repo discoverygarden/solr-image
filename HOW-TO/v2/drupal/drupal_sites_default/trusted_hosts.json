@@ -1,0 +1,5 @@
+[
+  "${FQDN}",
+  "${DRUPAL_IP}",
+  "localhost"
+]

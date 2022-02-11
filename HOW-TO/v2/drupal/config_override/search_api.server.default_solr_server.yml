@@ -1,0 +1,7 @@
+---
+backend_config:
+  host: ${SOLR_IP}
+  connector: basic_auth
+  connector_config:
+    username: ${SOLR_USER}
+    password: ${SOLR_PASSWORD}

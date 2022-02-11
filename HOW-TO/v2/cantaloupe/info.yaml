@@ -1,0 +1,4 @@
+---
+fallback: http://localhost/islandora/object/%{pid}/datastream/%{dsid}/view?token=%{token}
+sitemap:
+    ${DRUPAL_IP}_d8_default: 'http://${DRUPAL_IP}%{suffix}'

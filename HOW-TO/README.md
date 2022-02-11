@@ -1,33 +1,17 @@
 # README
+Difference in v1 and v2 is a performance/security trade-off
 
-## Prerequisites
-- required images must be built/exist
-- deploy Postgresql (local to the server or otherwise)
+## v1
+- better performance as services are mapped ports on VM, which is exposed
+- more ports are exposed = less secure
 
-## To deploy 
-- run `generate_configs.sh` to create "actual" configs which will be mounted over the defaults in the Docker image
-- `docker-compose up -d`
+## v2
+- utilizes Docker network
+- performance is lower as there is increased latency from the extra hops
+- increased security as ports for supporting services are only exposed within the network
 
-# Initializing (first time only)
-- run all the containers
-- enter Drupal container
-- run from **/opt/www/drupal/sites/default**
-```
-export DRUPAL_USER=islandora
-export DRUPAL_USER_PASS=islandora
-export DRUPAL_SITE_EMAIL=noreplysys@discoverygarden.ca
+## ATTENTION!!! :
+- `generate_configs.sh` was written for/tested on Ubuntu, so some commands used to acquire private IP (for example) may not work properly if run from a Mac or other Linux distros
 
-sudo -u www-data drush site-install minimal --db-url=pgsql://$DRUPAL_DB_USER:$(cat $DRUPAL_DB_PASSWORD)@$POSTGRES_HOST:5432/$DRUPAL_DB_NAME --site-name=default_site --account-name=$DRUPAL_USER --account-pass=$DRUPAL_USER_PASS --account-mail=$DRUPAL_SITE_EMAIL --sites-subdir=default --existing-config
-
-drush content-sync:import provisioned_content --actions=create --user=1
-drush content-sync:import i8-specific --actions=create --user=1
-drush -y migrate:import --userid=1 --group=islandora
-
-drush -y state-set dgi_i8_helper_iiif_site_id ${FQDN}_d8_default
-```
-
-- run from **/opt/www/drupal**
-```
-drush cr
-drush updb
-```
+## TODO
+- disable ClamAV via config_override
