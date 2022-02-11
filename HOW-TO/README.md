@@ -15,3 +15,4 @@ Difference in v1 and v2 is a performance/security trade-off
 
 ## TODO
 - disable ClamAV via config_override
+- make better use of Docker secrets in general

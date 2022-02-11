@@ -30,13 +30,13 @@ listen_addresses = '*'          # what IP address(es) to listen on;
 
 
 ## To deploy 
-- run `generate_configs.sh` to create "actual" configs which will be mounted over the defaults in the Docker image AND the docker-compose.yaml file itself (POSTGRES_HOST = VM private IP)
+- run `generate_configs.sh` to create "actual" configs which will be mounted over the defaults in the Docker image AND generate the `docker-compose.yaml` file itself (POSTGRES_HOST = VM private IP)
 - `docker-compose up -d`
 
 # Initializing (first time only)
 - run all the containers
 - enter Drupal container
-- run from **/opt/www/drupal/sites/default**
+- run from **`/opt/www/drupal/sites/default`**
 ```
 export DRUPAL_USER=islandora
 export DRUPAL_USER_PASS=islandora
@@ -51,7 +51,7 @@ drush -y migrate:import --userid=1 --group=islandora
 drush -y state-set dgi_i8_helper_iiif_site_id ${DRUPAL_IP}_d8_default
 ```
 
-- run from **/opt/www/drupal**
+- run from **`/opt/www/drupal`**
 ```
 drush cr
 drush updb
