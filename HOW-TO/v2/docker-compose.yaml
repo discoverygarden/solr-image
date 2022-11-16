@@ -23,7 +23,8 @@ services:
   drupal:
     image: drupal-crayfish:8.x-manage
     secrets:
-    - db-password
+      - db-password
+      - crayfish.key
     environment:
     - APACHE_RUN_DIR=/var/www/html
     - APACHE_RUN_USER=www-data
@@ -38,9 +39,6 @@ services:
     - DRUPAL_DB_USER=drupal
     - DRUPAL_DB_PASSWORD=/run/secrets/db-password
     volumes:
-    - ${PWD}/actual.25-crayfish-homarus.conf:/etc/apache2/conf-available/25-crayfish-homarus.conf
-    - ${PWD}/actual.25-crayfish-houdini.conf:/etc/apache2/conf-available/25-crayfish-houdini.conf
-    - ${PWD}/actual.25-crayfish-hypercube.conf:/etc/apache2/conf-available/25-crayfish-hypercube.conf
     - ${PWD}/actual.25-80-dgi.conf:/etc/apache2/sites-available/25-80-dgi.conf
     - ${PWD}/actual.settings.php:/opt/www/drupal/sites/default/settings.php
     - ${PWD}/actual.flysystem_config.json:/opt/www/drupal/sites/default/flysystem_config.json
@@ -50,12 +48,20 @@ services:
     - ${PWD}/actual.search_api.server.default_solr_server.yml:/opt/www/drupal/sites/default/config_override/search_api.server.default_solr_server.yml
     - ${PWD}/actual.clamav.settings.yml:/opt/www/drupal/sites/default/config_override/clamav.settings.yml
     - ${PWD}/actual.islandora.settings.yml:/opt/www/drupal/sites/default/config_override/islandora.settings.yml
+    - ${PWD}/actual.key.key.default.yml:/opt/www/drupal/sites/default/config_override/key.key.default.yml
     ports:
     - 80:80
     - 443:443
     networks:
       static-network:
         ipv4_address: 172.20.100.30
+  crayfish:
+    image: crayfish:3.x
+    secrets:
+      - crayfish.pub
+    networks:
+      static-network:
+        ipv4_address: 172.20.100.35
   karaf:
     image: karaf:4.2.11-alpine
     volumes:
@@ -101,3 +107,7 @@ services:
 secrets:
   db-password:
     file: db/password.txt
+  crayfish.key:
+    file: keys/default.key
+  crayfish.pub:
+    file: keys/default.pub

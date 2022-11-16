@@ -14,7 +14,7 @@
     <cm:default-properties>
       <cm:property name="error.maxRedeliveries" value="5"/>
       <cm:property name="in.stream" value="broker:queue:islandora-connector-houdini"/>
-      <cm:property name="derivative.service.url" value="http://drupal/houdini/convert"/>
+      <cm:property name="derivative.service.url" value="http://crayfish/houdini/convert"/>
     </cm:default-properties>
   </cm:property-placeholder>
 
