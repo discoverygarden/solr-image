@@ -1,4 +1,4 @@
-FROM tomcat:9.0.50
+FROM tomcat:9.0.69-jdk8-temurin-focal
 
 ENV LIBJPEGTURBO_VERSION=2.0.2
 ENV CANTALOUPE_VERSION=4.1.9
@@ -9,7 +9,7 @@ ENV CATALINA_BASE=/usr/local/tomcat
 ENV CATALINA_HOME=/usr/local/tomcat
 ENV CATALINA_PID=/usr/local/tomcat/pid/catalina.pid
 ENV TOMCAT_MEM=1g
-ENV JAVA_OPTS="-Xms${TOMCAT_MEM} -Xmx${TOMCAT_MEM} -XX:+UseParallelOldGC -server -Djava.awt.headless=true -Dcantaloupe.config=${CANTALOUPE_PROPERTIES}"
+ENV JAVA_OPTS="-Xms${TOMCAT_MEM} -Xmx${TOMCAT_MEM} -server -Djava.awt.headless=true -Dcantaloupe.config=${CANTALOUPE_PROPERTIES}"
 
 EXPOSE 8080
 
