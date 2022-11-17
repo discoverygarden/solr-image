@@ -31,6 +31,7 @@ listen_addresses = '*'          # what IP address(es) to listen on;
 
 ## To deploy 
 - run `generate_configs.sh` to create "actual" configs which will be mounted over the defaults in the Docker image AND generate the `docker-compose.yaml` file itself (POSTGRES_HOST = VM private IP)
+- The `actual.flysystem_config.json` does not contain any credentials to access s3. Use the `flysystem_config.json` from a dev box and change the prefix to be unique to your container.
 - `docker-compose up -d`
 
 # Initializing (first time only)

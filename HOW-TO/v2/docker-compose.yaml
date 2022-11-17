@@ -9,6 +9,8 @@ services:
     networks:
       static-network:
         ipv4_address: 172.20.100.10
+    ports:
+      - 8161:8161
   memcached:
     image: memcached:1.6-alpine
     deploy:
@@ -31,7 +33,7 @@ services:
     - APACHE_LOCK_DIR=/var/lock/apache2
     - APACHE_LOG_DIR=/var/log/apache2
     - LANG=C
-    - POSTGRES_HOST=localhost
+    - POSTGRES_HOST=db
     - DRUPAL_DB_NAME=drupal
     - DRUPAL_DB_USER=drupal
     - DRUPAL_DB_PASSWORD=/run/secrets/db-password
@@ -46,6 +48,7 @@ services:
     - ${PWD}/actual.islandora_iiif.settings.yml:/opt/www/drupal/sites/default/config_override/islandora_iiif.settings.yml
     - ${PWD}/actual.openseadragon.settings.yml:/opt/www/drupal/sites/default/config_override/openseadragon.settings.yml
     - ${PWD}/actual.search_api.server.default_solr_server.yml:/opt/www/drupal/sites/default/config_override/search_api.server.default_solr_server.yml
+    - ${PWD}/actual.clamav.settings.yml:/opt/www/drupal/sites/default/config_override/clamav.settings.yml
     - ${PWD}/actual.islandora.settings.yml:/opt/www/drupal/sites/default/config_override/islandora.settings.yml
     ports:
     - 80:80
@@ -78,6 +81,23 @@ services:
     networks:
       static-network:
         ipv4_address: 172.20.100.60
+  db:
+    image: postgres:12
+    secrets:
+      - db-password
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+      POSTGRES_USER: drupal
+      POSTGRES_DB: drupal
+      POSTGRES_INITDB_ARGS: -E UTF-8
+    networks:
+      static-network:
+        ipv4_address: 172.20.100.70
+  clamav:
+    image: clamav/clamav:latest
+    networks:
+      static-network:
+        ipv4_address: 172.20.100.80
 secrets:
   db-password:
     file: db/password.txt

@@ -14,7 +14,7 @@
     <cm:default-properties>
       <cm:property name="error.maxRedeliveries" value="5"/>
       <cm:property name="in.stream" value="broker:queue:islandora-connector-hypercube"/>
-      <cm:property name="derivative.service.url" value="http://${DRUPAL_IP}/hypercube"/>
+      <cm:property name="derivative.service.url" value="http://drupal/hypercube"/>
     </cm:default-properties>
   </cm:property-placeholder>
 

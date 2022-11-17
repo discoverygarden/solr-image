@@ -1,44 +1,24 @@
 {
   "repo-bin": {
-    "driver": "dgi_s3",
+    "driver": "local",
     "config": {
-      "region": "$S3_BUCKET_REGION",
-      "bucket": "$S3_BUCKET_NAME",
-      "public": false,
-      "prefix": "repo-bin",
-      "options": {
-        "StorageClass": "INTELLIGENT_TIERING"
-      },
-      "protocol": "https"
+      "root": "/opt/islandora_data/repo-bin"
     },
-    "cache": true
+    "cache": false
   },
   "repo-meta": {
-    "driver": "dgi_s3",
+    "driver": "local",
     "config": {
-      "region": "$S3_BUCKET_REGION",
-      "bucket": "$S3_BUCKET_NAME",
-      "public": false,
-      "prefix": "repo-meta",
-      "options": {
-        "StorageClass": "STANDARD"
-      },
-      "protocol": "https"
+      "root": "/opt/islandora_data/repo-meta"
     },
-    "cache": true
+    "cache": false
   },
   "repo-service": {
-    "driver": "dgi_s3",
+    "driver": "local",
     "config": {
-      "region": "$S3_BUCKET_REGION",
-      "bucket": "$S3_BUCKET_NAME",
-      "public": false,
-      "prefix": "repo-service",
-      "options": {
-        "StorageClass": "INTELLIGENT_TIERING"
-      },
-      "protocol": "https"
+      "root": "/opt/islandora_data/repo-service"
     },
-    "cache": true
+    "cache": false
   }
 }
+

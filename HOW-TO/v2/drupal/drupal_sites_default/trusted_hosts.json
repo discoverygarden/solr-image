@@ -1,4 +1,5 @@
 [
+  "drupal",
   "${FQDN}",
   "${DRUPAL_IP}",
   "localhost"

@@ -5,12 +5,9 @@ export KARAF_IP=172.20.100.40
 export SOLR_IP=172.20.100.50
 export CANTALOUPE_IP=172.20.100.60
 export FQDN=$(curl -s ipinfo.io/ip)
-export POSTGRES_HOST=$(hostname -I | awk '{print $1}')
+export POSTGRES_HOST="db"
 
 source ./islandora-install.properties
-
-# docker-compose.yaml
-envsubst '${POSTGRES_HOST}' < docker-compose.yaml.template > docker-compose.yaml
 
 # cantaloupe
 envsubst < cantaloupe/info.yaml > actual.info.yaml
@@ -35,6 +32,7 @@ envsubst < drupal/config_override/openseadragon.settings.yml > actual.openseadra
 envsubst < drupal/config_override/islandora_iiif.settings.yml > actual.islandora_iiif.settings.yml
 envsubst < drupal/config_override/search_api.server.default_solr_server.yml > actual.search_api.server.default_solr_server.yml
 envsubst < drupal/config_override/islandora.settings.yml > actual.islandora.settings.yml
+envsubst < drupal/config_override/clamav.settings.yml > actual.clamav.settings.yml
 
 # karaf - /opt/karaf/etc
 envsubst < karaf/org.fcrepo.camel.service.activemq.cfg > actual.org.fcrepo.camel.service.activemq.cfg
