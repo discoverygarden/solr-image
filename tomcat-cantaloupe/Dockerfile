@@ -63,7 +63,7 @@ RUN mkdir -p ${CANTALOUPE_CONFIGS} \
   && chown -R tomcat:tomcat ${CANTALOUPE_CONFIGS}
 
 COPY --chown=tomcat:tomcat \
-  actual_cantaloupe.properties cantaloupe.properties delegates.rb default_i8_delegates.rb \
+  actual_cantaloupe.properties cantaloupe.properties delegates.rb default_i8_delegates.rb info.yaml \
   ${CANTALOUPE_CONFIGS}/
 
 USER tomcat

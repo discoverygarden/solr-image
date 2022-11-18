@@ -49,7 +49,7 @@ drush content-sync:import provisioned_content --actions=create --user=1
 drush content-sync:import i8-specific --actions=create --user=1
 drush -y migrate:import --userid=1 --group=islandora
 
-drush -y state-set dgi_i8_helper_iiif_site_id ${DRUPAL_IP}_d8_default
+drush -y state-set dgi_i8_helper_iiif_site_id drupal_d8_default
 ```
 
 - run from **`/opt/www/drupal`**
