@@ -9,9 +9,6 @@ export POSTGRES_HOST="db"
 
 source ./islandora-install.properties
 
-# cantaloupe
-envsubst < cantaloupe/info.yaml > actual.info.yaml
-
 # drupal - /etc/apache2/sites-available
 envsubst < drupal/sites-available/25-80-dgi.conf > actual.25-80-dgi.conf
 

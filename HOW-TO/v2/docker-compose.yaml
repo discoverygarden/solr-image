@@ -73,11 +73,9 @@ services:
       static-network:
         ipv4_address: 172.20.100.50
   cantaloupe:
-    image: cantaloupe:4.1.9-tomcat
+    image: cantaloupe:4.1.9-tomcat9.0.69
     environment:
     - TOMCAT_MEM="1g"
-    volumes:
-    - ${PWD}/actual.info.yaml:/opt/cantaloupe_configs/info.yaml
     networks:
       static-network:
         ipv4_address: 172.20.100.60
