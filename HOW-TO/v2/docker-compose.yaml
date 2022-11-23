@@ -21,34 +21,25 @@ services:
       static-network:
         ipv4_address: 172.20.100.20
   drupal:
-    image: drupal-crayfish:8.x-manage
+    image: drupal:9.x-manage
     secrets:
       - db-password
       - crayfish.key
     environment:
-    - APACHE_RUN_DIR=/var/www/html
-    - APACHE_RUN_USER=www-data
-    - APACHE_RUN_GROUP=www-data
-    - APACHE_PID_FILE=/var/run/apache2/apache2.pid
-    - APACHE_RUN_DIR=/var/run/apache2
-    - APACHE_LOCK_DIR=/var/lock/apache2
-    - APACHE_LOG_DIR=/var/log/apache2
     - LANG=C
     - POSTGRES_HOST=db
     - DRUPAL_DB_NAME=drupal
     - DRUPAL_DB_USER=drupal
-    - DRUPAL_DB_PASSWORD=/run/secrets/db-password
+    - DRUPAL_DB_PASSWORD_FILE=/run/secrets/db-password
     volumes:
-    - ${PWD}/actual.25-80-dgi.conf:/etc/apache2/sites-available/25-80-dgi.conf
-    - ${PWD}/actual.settings.php:/opt/www/drupal/sites/default/settings.php
-    - ${PWD}/actual.flysystem_config.json:/opt/www/drupal/sites/default/flysystem_config.json
-    - ${PWD}/actual.trusted_hosts.json:/opt/www/drupal/sites/default/trusted_hosts.json
-    - ${PWD}/actual.islandora_iiif.settings.yml:/opt/www/drupal/sites/default/config_override/islandora_iiif.settings.yml
-    - ${PWD}/actual.openseadragon.settings.yml:/opt/www/drupal/sites/default/config_override/openseadragon.settings.yml
-    - ${PWD}/actual.search_api.server.default_solr_server.yml:/opt/www/drupal/sites/default/config_override/search_api.server.default_solr_server.yml
-    - ${PWD}/actual.clamav.settings.yml:/opt/www/drupal/sites/default/config_override/clamav.settings.yml
-    - ${PWD}/actual.islandora.settings.yml:/opt/www/drupal/sites/default/config_override/islandora.settings.yml
-    - ${PWD}/actual.key.key.default.yml:/opt/www/drupal/sites/default/config_override/key.key.default.yml
+      - ${PWD}/actual.flysystem_config.json:/opt/www/drupal/web/sites/default/flysystem_config.json
+      - ${PWD}/actual.trusted_hosts.json:/opt/www/drupal/web/sites/default/trusted_hosts.json
+      - ${PWD}/actual.islandora_iiif.settings.yml:/opt/www/drupal/web/sites/default/config_override/islandora_iiif.settings.yml
+      - ${PWD}/actual.openseadragon.settings.yml:/opt/www/drupal/web/sites/default/config_override/openseadragon.settings.yml
+      - ${PWD}/actual.search_api.server.default_solr_server.yml:/opt/www/drupal/web/sites/default/config_override/search_api.server.default_solr_server.yml
+      - ${PWD}/actual.clamav.settings.yml:/opt/www/drupal/web/sites/default/config_override/clamav.settings.yml
+      - ${PWD}/actual.islandora.settings.yml:/opt/www/drupal/web/sites/default/config_override/islandora.settings.yml
+      - ${PWD}/actual.key.key.default.yml:/opt/www/drupal/web/sites/default/config_override/key.key.default.yml
     ports:
     - 80:80
     - 443:443
