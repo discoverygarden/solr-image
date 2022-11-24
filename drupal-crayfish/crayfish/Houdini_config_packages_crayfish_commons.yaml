@@ -1,6 +1,0 @@
----
-crayfish_commons:
-  fedora_base_uri: 'http://localhost:8080/fcrepo/rest'
-  gemini_base_uri: 'http://localhost:9000/gemini'
-  syn_config: '/opt/www/crayfish/syn-settings.xml'
-  syn_enabled: true
