@@ -26,11 +26,11 @@ services:
       - db-password
       - crayfish.key
     environment:
-    - LANG=C
-    - POSTGRES_HOST=db
-    - DRUPAL_DB_NAME=drupal
-    - DRUPAL_DB_USER=drupal
-    - DRUPAL_DB_PASSWORD_FILE=/run/secrets/db-password
+      - LANG=C
+      - POSTGRES_HOST=db
+      - DRUPAL_DB_NAME=drupal
+      - DRUPAL_DB_USER=drupal
+      - DRUPAL_DB_PASSWORD_FILE=/run/secrets/db-password
     volumes:
       - ${PWD}/actual.flysystem_config.json:/opt/www/drupal/web/sites/default/flysystem_config.json
       - ${PWD}/actual.trusted_hosts.json:/opt/www/drupal/web/sites/default/trusted_hosts.json
