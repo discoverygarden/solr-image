@@ -62,14 +62,8 @@ services:
     networks:
       static-network:
         ipv4_address: 172.20.100.35
-  karaf:
-    image: karaf:4.2.11-alpine
-    volumes:
-    - ${PWD}/actual.org.fcrepo.camel.service.activemq.cfg:/opt/karaf/etc/org.fcrepo.camel.service.activemq.cfg
-    - ${PWD}/actual.crayfish.dgi.xml:/opt/karaf/deploy/crayfish.dgi.xml
-    - ${PWD}/actual.ca.islandora.alpaca.connector.homarus.blueprint.xml:/opt/karaf/deploy/ca.islandora.alpaca.connector.homarus.blueprint.xml
-    - ${PWD}/actual.ca.islandora.alpaca.connector.houdini.blueprint.xml:/opt/karaf/deploy/ca.islandora.alpaca.connector.houdini.blueprint.xml
-    - ${PWD}/actual.ca.islandora.alpaca.connector.hypercube.blueprint.xml:/opt/karaf/deploy/ca.islandora.alpaca.connector.hypercube.blueprint.xml
+  alpaca:
+    image: alpaca:2.2.0
     networks:
       static-network:
         ipv4_address: 172.20.100.40

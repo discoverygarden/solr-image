@@ -25,15 +25,6 @@ envsubst < drupal/config_override/islandora.settings.yml > actual.islandora.sett
 envsubst < drupal/config_override/clamav.settings.yml > actual.clamav.settings.yml
 envsubst < drupal/config_override/key.key.default.yml > actual.key.key.default.yml
 
-# karaf - /opt/karaf/etc
-envsubst < karaf/org.fcrepo.camel.service.activemq.cfg > actual.org.fcrepo.camel.service.activemq.cfg
-
-# karaf - /opt/karaf/deploy
-envsubst < karaf/crayfish.dgi.xml > actual.crayfish.dgi.xml
-envsubst < karaf/ca.islandora.alpaca.connector.homarus.blueprint.xml > actual.ca.islandora.alpaca.connector.homarus.blueprint.xml
-envsubst < karaf/ca.islandora.alpaca.connector.houdini.blueprint.xml > actual.ca.islandora.alpaca.connector.houdini.blueprint.xml
-envsubst < karaf/ca.islandora.alpaca.connector.hypercube.blueprint.xml > actual.ca.islandora.alpaca.connector.hypercube.blueprint.xml
-
 # Generate Crayfish keys
 mkdir -p keys
 openssl genrsa -out keys/default.key 2048
