@@ -6,8 +6,12 @@ export SOLR_IP=172.20.100.50
 export CANTALOUPE_IP=172.20.100.60
 export FQDN=$(curl -s ipinfo.io/ip)
 export POSTGRES_HOST="db"
+export INGRESS_HOST="localhost"
+export SOLR_USER=drupal
+export SOLR_PASSWORD=drupal
 
-source ./islandora-install.properties
+# Read from a .env file for local overrides
+[[ -f ".env" ]] && export $(grep -v '^#' .env | xargs)
 
 # drupal - /opt/www/drupal/sites/default
 envsubst < drupal/drupal_sites_default/flysystem_config.json > actual.flysystem_config.json
@@ -15,10 +19,7 @@ envsubst < drupal/drupal_sites_default/trusted_hosts.json > actual.trusted_hosts
 
 # drupal - /opt/www/drupal/sites/default/config_override
 envsubst < drupal/config_override/openseadragon.settings.yml > actual.openseadragon.settings.yml
-envsubst < drupal/config_override/islandora_iiif.settings.yml > actual.islandora_iiif.settings.yml
 envsubst < drupal/config_override/search_api.server.default_solr_server.yml > actual.search_api.server.default_solr_server.yml
-envsubst < drupal/config_override/islandora.settings.yml > actual.islandora.settings.yml
-envsubst < drupal/config_override/clamav.settings.yml > actual.clamav.settings.yml
 envsubst < drupal/config_override/key.key.default.yml > actual.key.key.default.yml
 
 # Generate Crayfish keys
