@@ -45,8 +45,8 @@ COPY --chown=solr:solr \
   /var/solr/data/security.json
 
 COPY solr_8.x_config_3.zip /tmp/
-RUN unzip -o /tmp/solr_8.x_config_3.zip -d /var/solr/data/isladora8/conf/ \
-    && chown -R solr:solr /var/solr/data/isladora8/conf/
+RUN unzip -o /tmp/solr_8.x_config_3.zip -d /var/solr/data/islandora8/conf/ \
+    && chown -R solr:solr /var/solr/data/islandora8/conf/
 USER solr
 
 WORKDIR /opt/solr
