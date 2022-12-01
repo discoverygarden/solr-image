@@ -1,0 +1,334 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: activemq
+  name: activemq
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: activemq
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: activemq
+    spec:
+      containers:
+      - image: activemq:5.16.2-alpine
+        imagePullPolicy: Always
+        name: activemq
+        ports: 
+        - containerPort: 8161
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## ALPACA
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: alpaca
+  name: alpaca
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: alpaca
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: alpaca
+    spec:
+      containers:
+      - image: alpaca:2.2.0
+        imagePullPolicy: Always
+        name: alpaca
+        ports: 
+        - containerPort: 8181
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## DRUPAL
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: drupal
+  name: drupal
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: drupal
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: drupal
+    spec:
+      containers:
+      - image: drupal-crayfish:8.x-manage
+        imagePullPolicy: Always
+        name: drupal
+        ports: 
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## MEMCACHE
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: memcache
+  name: memcache
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: memcache
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: memcache
+    spec:
+      containers:
+      - image: memcached:1.6-alpine
+        imagePullPolicy: Always
+        name: memcache
+        ports: 
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## CRAYFISH
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: crayfish
+  name: crayfish
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: crayfish
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: crayfish
+    spec:
+      containers:
+      - image: crayfish:3.x
+        imagePullPolicy: Always
+        name: crayfish
+        ports: 
+        - containerPort: 8000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## SOLR
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: solr
+  name: solr
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: solr
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: solr
+    spec:
+      containers:
+      - image: solr:8.9.0-alpine
+        imagePullPolicy: Always
+        name: solr
+        ports: 
+        - containerPort: 8983
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## CANTALOUPE
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: cantaloupe
+  name: cantaloupe
+  namespace: default
+  resourceVersion: "15123"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
+  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: cantaloupe
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: cantaloupe
+    spec:
+      containers:
+      - image: cantaloupe:4.1.9-tomcat9.0.69
+        imagePullPolicy: Always
+        name: cantaloupe
+        ports: 
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+---
