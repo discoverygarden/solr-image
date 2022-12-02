@@ -176,7 +176,7 @@ spec:
         imagePullPolicy: Always
         name: memcache
         ports: 
-        - containerPort: 80
+        - containerPort: 11211
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
