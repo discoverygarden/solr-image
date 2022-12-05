@@ -3,6 +3,10 @@ FROM eclipse-temurin:11-jre-focal
 ENV ALPACA_VERSION="2.2.0"
 ENV ALPACA_LOG_LEVEL="INFO"
 ENV ALPACA_HEAP="512m"
+ENV ACTIVEMQ_URL="tcp://activemq:61616"
+ENV HOMARUS_URL="http://crayfish/homarus/convert"
+ENV HOUDINI_URL="http://crayfish/houdini/convert"
+ENV HYPERCUBE_URL="http://crayfish/hypercube"
 
 RUN useradd alpaca
 
@@ -17,6 +21,10 @@ USER alpaca
 WORKDIR /opt/alpaca
 
 CMD java -Dislandora.alpaca.log=${ALPACA_LOG_LEVEL} \
+    -Djms.brokerUrl=${ACTIVEMQ_URL} \
+    -Dderivative.homarus.service.url=${HOMARUS_URL} \
+    -Dderivative.houdini.service.url=${HOUDINI_URL} \
+    -Dderivative.ocr.service.url=${HYPERCUBE_URL} \
     -Xmx${ALPACA_HEAP} \
     -jar /opt/alpaca/islandora-alpaca-app-all.jar \
     -c /opt/alpaca/alpaca.properties
