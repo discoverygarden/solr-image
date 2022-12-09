@@ -26,13 +26,13 @@ services:
       - db-password
       - crayfish.key
     environment:
-      - LANG=C
-      - POSTGRES_HOST=db
-      - DRUPAL_DB_NAME=drupal
-      - DRUPAL_DB_USER=drupal
-      - DRUPAL_DB_PASSWORD_FILE=/run/secrets/db-password
-      - IIIF_INGRESS_URL=http://${INGRESS_HOST:-drupal}/iiif/2
-      - DRUPAL_TRUSTED_HOSTS=${INGRESS_HOST},drupal,localhost,asdf
+      LANG: C
+      POSTGRES_HOST: db
+      DRUPAL_DB_NAME: drupal
+      DRUPAL_DB_USER: drupal
+      DRUPAL_DB_PASSWORD_FILE: /run/secrets/db-password
+      IIIF_INGRESS_URL: http://${INGRESS_HOST:-drupal}/iiif/2
+      DRUPAL_TRUSTED_HOSTS: '["${INGRESS_HOST}","drupal","localhost","asdf"]'
     ports:
     - 80:80
     - 443:443
