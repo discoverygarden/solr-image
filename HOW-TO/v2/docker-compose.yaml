@@ -26,22 +26,20 @@ services:
       - db-password
       - crayfish.key
     environment:
-      - LANG=C
-      - POSTGRES_HOST=db
-      - DRUPAL_DB_NAME=drupal
-      - DRUPAL_DB_USER=drupal
-      - DRUPAL_DB_PASSWORD_FILE=/run/secrets/db-password
-    volumes:
-      - ${PWD}/actual.flysystem_config.json:/opt/www/drupal/web/sites/default/flysystem_config.json
-      - ${PWD}/actual.trusted_hosts.json:/opt/www/drupal/web/sites/default/trusted_hosts.json
-      - ${PWD}/actual.openseadragon.settings.yml:/opt/www/drupal/web/sites/default/config_override/openseadragon.settings.yml
-      - ${PWD}/actual.search_api.server.default_solr_server.yml:/opt/www/drupal/web/sites/default/config_override/search_api.server.default_solr_server.yml
-      - ${PWD}/actual.key.key.default.yml:/opt/www/drupal/web/sites/default/config_override/key.key.default.yml
+      LANG: C
+      POSTGRES_HOST: db
+      DRUPAL_DB_NAME: drupal
+      DRUPAL_DB_USER: drupal
+      DRUPAL_DB_PASSWORD_FILE: /run/secrets/db-password
+      IIIF_INGRESS_URL: http://${INGRESS_HOST:-drupal}/iiif/2
+      DRUPAL_TRUSTED_HOSTS: '["${INGRESS_HOST}","drupal","localhost"]'
     ports:
     - 80:80
     - 443:443
     networks:
       static-network:
+        aliases:
+          - ${INGRESS_HOST:-drupal}
         ipv4_address: 172.20.100.30
   crayfish:
     image: crayfish:3.x

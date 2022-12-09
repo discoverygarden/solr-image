@@ -1,2 +1,0 @@
----
-iiif_server: http://${INGRESS_HOST}/iiif/2

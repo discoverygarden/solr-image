@@ -13,15 +13,6 @@ export SOLR_PASSWORD=drupal
 # Read from a .env file for local overrides
 [[ -f ".env" ]] && export $(grep -v '^#' .env | xargs)
 
-# drupal - /opt/www/drupal/sites/default
-envsubst < drupal/drupal_sites_default/flysystem_config.json > actual.flysystem_config.json
-envsubst < drupal/drupal_sites_default/trusted_hosts.json > actual.trusted_hosts.json
-
-# drupal - /opt/www/drupal/sites/default/config_override
-envsubst < drupal/config_override/openseadragon.settings.yml > actual.openseadragon.settings.yml
-envsubst < drupal/config_override/search_api.server.default_solr_server.yml > actual.search_api.server.default_solr_server.yml
-envsubst < drupal/config_override/key.key.default.yml > actual.key.key.default.yml
-
 # Generate Crayfish keys
 mkdir -p keys
 openssl genrsa -out keys/default.key 2048

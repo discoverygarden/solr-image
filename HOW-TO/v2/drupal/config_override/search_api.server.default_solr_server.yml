@@ -1,7 +1,0 @@
----
-backend_config:
-  connector: basic_auth
-  connector_config:
-    host: solr
-    username: ${SOLR_USER}
-    password: ${SOLR_PASSWORD}
