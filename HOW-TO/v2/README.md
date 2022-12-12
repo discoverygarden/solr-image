@@ -1,7 +1,13 @@
 # README
 
 ## Prerequisites
-- required images must be built/exist
+- To authenticate docker agaist ecr
+```
+# Login to aws cli
+aws sso login --profile container_dev
+# Authenticate docker
+aws ecr get-login-password | docker login --username AWS --password-stdin 231224489621.dkr.ecr.us-east-1.amazonaws.com
+```
 
 
 ## To deploy 

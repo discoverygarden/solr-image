@@ -5,7 +5,7 @@ networks:
       - subnet: 172.20.0.0/16
 services:
   activemq:
-    image: activemq:5.16.2-alpine
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/activemq:5.16.2-alpine
     networks:
       static-network:
         ipv4_address: 172.20.100.10
@@ -21,7 +21,7 @@ services:
       static-network:
         ipv4_address: 172.20.100.20
   drupal:
-    image: drupal:9.x-manage
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal:9.x-manage
     secrets:
       - db-password
       - crayfish.key
@@ -42,24 +42,24 @@ services:
           - ${INGRESS_HOST:-drupal}
         ipv4_address: 172.20.100.30
   crayfish:
-    image: crayfish:3.x
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/crayfish:3.x
     secrets:
       - crayfish.pub
     networks:
       static-network:
         ipv4_address: 172.20.100.35
   alpaca:
-    image: alpaca:2.2.0
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/alpaca:2.2.0
     networks:
       static-network:
         ipv4_address: 172.20.100.40
   solr:
-    image: solr:8.9.0-alpine
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/solr:8.9.0-alpine
     networks:
       static-network:
         ipv4_address: 172.20.100.50
   cantaloupe:
-    image: cantaloupe:4.1.9-tomcat9.0.69
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/cantaloupe:4.1.9-tomcat9.0.69
     environment:
     - TOMCAT_MEM="1g"
     networks:
