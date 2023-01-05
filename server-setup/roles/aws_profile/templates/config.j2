@@ -1,0 +1,4 @@
+[{{profile}}]
+{% for item in config -%}
+{{item}} = {{ config[item] }}
+{% endfor %}

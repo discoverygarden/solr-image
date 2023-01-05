@@ -1,0 +1,9 @@
+---
+- name: Ensure addons enabled
+  command:
+    cmd: '{{ microk8s_path }} enable "{{ item }}"'
+  register: result
+  changed_when: '" is already enabled" not in result.stdout'
+  loop: '{{ microk8s_addons }}'
+  become: true
+  become_user: '{{ microk8s_user.name }}'

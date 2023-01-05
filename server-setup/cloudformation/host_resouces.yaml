@@ -1,0 +1,14 @@
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  Hostname:
+    Type: String
+
+Resources:
+  ServiceAccount:
+    Type: AWS::IAM::User
+    Properties:
+      ManagedPolicyArns:
+        - !ImportValue EcrReadOnly
+      UserName: !Sub ${Hostname}-microk8s

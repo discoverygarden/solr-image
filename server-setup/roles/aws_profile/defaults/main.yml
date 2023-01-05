@@ -1,0 +1,5 @@
+---
+config:
+  region: us-east-1
+profile: default
+local_profile: containerdev

@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Outputs:
+  EcrReadOnly:
+    Description: The Arn of the ECR Read only Policy
+    Value: !Ref EcrReadOnly
+    Export:
+      Name: EcrReadOnly
+
+Resources:
+  EcrReadOnly:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'ecr:BatchGetImage'
+              - 'ecr:GetDownloadUrlForLayer'
+            Resource: !Sub 'arn:${AWS::Partition}:ecr:${AWS::Region}:${AWS::AccountId}:repository/*'
+          - Effect: Allow
+            Action:
+              - 'ecr:GetAuthorizationToken'
+            Resource: '*'
