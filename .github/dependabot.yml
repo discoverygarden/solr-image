@@ -7,3 +7,9 @@ updates:
     # ignore:
     #   - dependency-name: "debian"
     #     versions: [">= 12.0"]
+registries:
+  ecr-docker:
+    type: docker-registry
+    url: https://231224489621.dkr.ecr.us-east-1.amazonaws.com
+    username: ${{secrets.ECR_AWS_ACCESS_KEY_ID}}
+    password: ${{secrets.ECR_AWS_SECRET_ACCESS_KEY}}
