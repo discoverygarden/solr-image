@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "infra/templates/islandora"
+    schedule:
+      interval: "daily"
+    # ignore:
+    #   - dependency-name: "debian"
+    #     versions: [">= 12.0"]
