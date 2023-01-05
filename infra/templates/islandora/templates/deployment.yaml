@@ -1,4 +1,67 @@
----
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: {{ include "islandora.fullname" . }}
+#   labels:
+#     {{- include "islandora.labels" . | nindent 4 }}
+# spec:
+# {{- if not .Values.autoscaling.enabled }}
+#   replicas: {{ .Values.replicaCount }}
+# {{- end }}
+#   selector:
+#     matchLabels:
+#       {{- include "islandora.selectorLabels" . | nindent 6 }}
+#   template:
+#     metadata:
+#     {{- with .Values.podAnnotations }}
+#       annotations:
+#         {{- toYaml . | nindent 8 }}
+#     {{- end }}
+#       labels:
+#         {{- include "islandora.selectorLabels" . | nindent 8 }}
+#     spec:
+#       {{- with .Values.imagePullSecrets }}
+#       imagePullSecrets:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+#       serviceAccountName: {{ include "islandora.serviceAccountName" . }}
+#       securityContext:
+#         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+#       containers:
+#         - name: {{ .Chart.Name }}
+#           securityContext:
+#             {{- toYaml .Values.securityContext | nindent 12 }}
+#           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+#           imagePullPolicy: {{ .Values.image.pullPolicy }}
+#           ports:
+#             - name: http
+#               containerPort: 80
+#               protocol: TCP
+#           livenessProbe:
+#             httpGet:
+#               path: /
+#               port: http
+#           readinessProbe:
+#             httpGet:
+#               path: /
+#               port: http
+#           resources:
+#             {{- toYaml .Values.resources | nindent 12 }}
+#       {{- with .Values.nodeSelector }}
+#       nodeSelector:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+#       {{- with .Values.affinity }}
+#       affinity:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+#       {{- with .Values.tolerations }}
+#       tolerations:
+#         {{- toYaml . | nindent 8 }}
+#       {{- end }}
+# ---
+## ACTIVEMQ
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,7 +74,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.activemq.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -28,7 +91,7 @@ spec:
         component: activemq
     spec:
       containers:
-      - image: activemq:5.16.2-alpine
+      - image: {{ .Values.activemq.image }}
         imagePullPolicy: Always
         name: activemq
         ports: 
@@ -45,6 +108,7 @@ spec:
 status: {}
 
 ---
+
 ## ALPACA
 
 apiVersion: apps/v1
@@ -59,7 +123,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.alpaca.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -76,7 +140,7 @@ spec:
         component: alpaca
     spec:
       containers:
-      - image: alpaca:2.2.0
+      - image: {{ .Values.alpaca.image }}
         imagePullPolicy: Always
         name: alpaca
         ports: 
@@ -85,6 +149,17 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        env:
+          - name: ACTIVEMQ_HOST
+            value: {{ .Values.alpaca.activemq.host }}
+          - name: ACTIVEMQ_JMS_PORT
+            value: 61616
+          - name: HOMARUS_URL
+            value: 'http://crayfish/homarus/convert'
+          - name: HOUDINI_URL
+            value: 'http://crayfish/houdini/convert'
+          - name: HYPERCUBE_URL
+            value: 'http://crayfish/hypercube'
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -93,10 +168,11 @@ spec:
 status: {}
 
 ---
+
 ## DRUPAL
 
 apiVersion: apps/v1
-kind: Deployment
+kind:  
 metadata:
   labels:
     component: drupal
@@ -107,7 +183,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.drupal.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -124,7 +200,7 @@ spec:
         component: drupal
     spec:
       containers:
-      - image: drupal-crayfish:8.x-manage
+      - image: {{ .Values.drupal.image }}
         imagePullPolicy: Always
         name: drupal
         ports: 
@@ -133,6 +209,53 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        env:
+          - name: DRUPAL_DB_NAME
+            value: {{ .Values.drupal.db.name }}
+          - name: DRUPAL_DB_USER
+            value: {{ .Values.drupal.db.user }}
+          - name: DRUPAL_TRUSTED_HOSTS
+            value: {{ .Values.drupal.trust.hosts }}
+          - name: POSTGRES_HOST
+            value: {{ .Values.drupal.postgres.host }}
+          - name: MEMCACHED_HOST
+            value: {{ .Values.drupal.memcached.host }}
+          - name: MEMCACHED_PORT
+            value: 11211
+          - name: SOLR_HOST
+            value: {{ .Values.drupal.solr.host }}
+          - name: SOLR_USERNAME
+            value: {{ .Values.drupal.solr.user }}
+          - name: JWT_KEY_TYPE
+            value: RS256
+          ## TODO: Create a secret for the below key and mount it here to the pod as volume
+          - name: JWT_KEY_FILE
+            value: ${JWT_KEY_FILE}
+          - name: IIIF_URL
+            value: ${IIIF_URL}
+          - name: IIIF_INGRESS_URL
+            value: ${IIIF_INGRESS_URL}
+          - name: ACTIVEMQ_HOST
+            value: {{ .Values.drupal.activemq.host }}
+          - name: ACTIVEMQ_STOMP_PORT
+            value: 61613
+          - name: CONFIG_SPLITS
+            value: {{ .Values.drupal.activemq.config_splits }}
+          - name: CLAMAV_HOST
+            value: {{ .Values.drupal.clamav.host }}
+          - name: CLAMAV_PORT
+            value: 3310
+        envFrom:
+          - name: DRUPAL_DB_PASSWORD 
+            valueFrom:
+              secretKeyRef:
+                name: drupal_db 
+                key: drupal_db_pwd
+          - name: SOLR_PASSWORD
+             valueFrom:
+              secretKeyRef:
+                name: solr_password 
+                key: solr_pwd
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -141,6 +264,7 @@ spec:
 status: {}
 
 ---
+
 ## MEMCACHE
 
 apiVersion: apps/v1
@@ -155,7 +279,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.memcache.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -172,7 +296,7 @@ spec:
         component: memcache
     spec:
       containers:
-      - image: memcached:1.6-alpine
+      - image: {{ .Values.memcache.image }}
         imagePullPolicy: Always
         name: memcache
         ports: 
@@ -189,6 +313,7 @@ spec:
 status: {}
 
 ---
+
 ## CRAYFISH
 
 apiVersion: apps/v1
@@ -203,7 +328,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.crayfish.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -220,7 +345,7 @@ spec:
         component: crayfish
     spec:
       containers:
-      - image: crayfish:3.x
+      - image: {{ .Values.crayfish.image }}
         imagePullPolicy: Always
         name: crayfish
         ports: 
@@ -251,7 +376,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.solr.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -268,7 +393,7 @@ spec:
         component: solr
     spec:
       containers:
-      - image: solr:8.9.0-alpine
+      - image: {{ .Values.solr.image }}
         imagePullPolicy: Always
         name: solr
         ports: 
@@ -299,7 +424,7 @@ metadata:
   uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: {{ .Values.cantaloupe.replicas }}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -316,7 +441,7 @@ spec:
         component: cantaloupe
     spec:
       containers:
-      - image: cantaloupe:4.1.9-tomcat9.0.69
+      - image: {{ .Values.cantaloupe.image }}
         imagePullPolicy: Always
         name: cantaloupe
         ports: 

@@ -1,3 +1,19 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: {{ include "islandora.fullname" . }}
+#   labels:
+#     {{- include "islandora.labels" . | nindent 4 }}
+# spec:
+#   type: {{ .Values.service.type }}
+#   ports:
+#     - port: {{ .Values.service.port }}
+#       targetPort: http
+#       protocol: TCP
+#       name: http
+#   selector:
+#     {{- include "islandora.selectorLabels" . | nindent 4 }}
+
 ---
 
 apiVersion: v1
@@ -97,4 +113,20 @@ spec:
       targetPort: 11216
   selector:
     component: cantaloupe
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-drupal
+  labels:
+    component: drupal
+spec:
+  ports:
+    - name: 8443-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    component: drupal
 ---
