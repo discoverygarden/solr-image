@@ -5,7 +5,7 @@ networks:
       - subnet: 172.20.0.0/16
 services:
   activemq:
-    image: activemq:5.16.2-alpine
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/activemq:5.16.2-alpine
     networks:
       static-network:
         ipv4_address: 172.20.100.10
@@ -21,59 +21,45 @@ services:
       static-network:
         ipv4_address: 172.20.100.20
   drupal:
-    image: drupal-crayfish:8.x-manage
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal:9.x-manage
     secrets:
       - db-password
       - crayfish.key
     environment:
-    - APACHE_RUN_DIR=/var/www/html
-    - APACHE_RUN_USER=www-data
-    - APACHE_RUN_GROUP=www-data
-    - APACHE_PID_FILE=/var/run/apache2/apache2.pid
-    - APACHE_RUN_DIR=/var/run/apache2
-    - APACHE_LOCK_DIR=/var/lock/apache2
-    - APACHE_LOG_DIR=/var/log/apache2
-    - LANG=C
-    - POSTGRES_HOST=db
-    - DRUPAL_DB_NAME=drupal
-    - DRUPAL_DB_USER=drupal
-    - DRUPAL_DB_PASSWORD=/run/secrets/db-password
-    volumes:
-    - ${PWD}/actual.25-80-dgi.conf:/etc/apache2/sites-available/25-80-dgi.conf
-    - ${PWD}/actual.settings.php:/opt/www/drupal/sites/default/settings.php
-    - ${PWD}/actual.flysystem_config.json:/opt/www/drupal/sites/default/flysystem_config.json
-    - ${PWD}/actual.trusted_hosts.json:/opt/www/drupal/sites/default/trusted_hosts.json
-    - ${PWD}/actual.islandora_iiif.settings.yml:/opt/www/drupal/sites/default/config_override/islandora_iiif.settings.yml
-    - ${PWD}/actual.openseadragon.settings.yml:/opt/www/drupal/sites/default/config_override/openseadragon.settings.yml
-    - ${PWD}/actual.search_api.server.default_solr_server.yml:/opt/www/drupal/sites/default/config_override/search_api.server.default_solr_server.yml
-    - ${PWD}/actual.clamav.settings.yml:/opt/www/drupal/sites/default/config_override/clamav.settings.yml
-    - ${PWD}/actual.islandora.settings.yml:/opt/www/drupal/sites/default/config_override/islandora.settings.yml
-    - ${PWD}/actual.key.key.default.yml:/opt/www/drupal/sites/default/config_override/key.key.default.yml
+      LANG: C
+      POSTGRES_HOST: db
+      DRUPAL_DB_NAME: drupal
+      DRUPAL_DB_USER: drupal
+      DRUPAL_DB_PASSWORD_FILE: /run/secrets/db-password
+      IIIF_INGRESS_URL: http://${INGRESS_HOST:-drupal}/iiif/2
+      DRUPAL_TRUSTED_HOSTS: '["${INGRESS_HOST}","drupal","localhost"]'
     ports:
     - 80:80
     - 443:443
     networks:
       static-network:
+        aliases:
+          - ${INGRESS_HOST:-drupal}
         ipv4_address: 172.20.100.30
   crayfish:
-    image: crayfish:3.x
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/crayfish:3.x
     secrets:
       - crayfish.pub
     networks:
       static-network:
         ipv4_address: 172.20.100.35
   alpaca:
-    image: alpaca:2.2.0
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/alpaca:2.2.0
     networks:
       static-network:
         ipv4_address: 172.20.100.40
   solr:
-    image: solr:8.9.0-alpine
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/solr:8.9.0-alpine
     networks:
       static-network:
         ipv4_address: 172.20.100.50
   cantaloupe:
-    image: cantaloupe:4.1.9-tomcat9.0.69
+    image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/cantaloupe:4.1.9-tomcat9.0.69
     environment:
     - TOMCAT_MEM="1g"
     networks:
@@ -93,6 +79,8 @@ services:
         ipv4_address: 172.20.100.70
   clamav:
     image: clamav/clamav:latest
+    volumes:
+      - ${PWD}/freshclam.conf:/etc/clamav/freshclam.conf
     networks:
       static-network:
         ipv4_address: 172.20.100.80

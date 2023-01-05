@@ -1,6 +1,0 @@
----
-enabled: true
-scan_mode: 0
-mode_daemon_tcpip:
-  hostname: clamav
-
