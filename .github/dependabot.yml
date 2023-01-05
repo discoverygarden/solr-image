@@ -4,7 +4,7 @@ updates:
     directory: "infra/templates/islandora"
     schedule:
       interval: "daily"
-      registries: "*"
+    registries: "*"
     # ignore:
     #   - dependency-name: "debian"
     #     versions: [">= 12.0"]
