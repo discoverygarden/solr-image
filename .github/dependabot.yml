@@ -4,3 +4,19 @@ updates:
     directory: "activemq-alpine"
     schedule:
       interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "alpaca"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "crayfish"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "solr-alpine"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "tomcat-cantaloupe"
+    schedule:
+      interval: "daily"
