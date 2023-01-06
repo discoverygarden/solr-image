@@ -7,15 +7,17 @@ Resources:
   Dependabot:
     Type: AWS::IAM::User
     Properties:
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Action:
-              - 'ecr:ListImages'
-              - 'ecr:BatchGetImage'
-            Resource: !Sub 'arn:${AWS::Partition}:ecr:${AWS::Region}:${AWS::AccountId}:repository/*'
-          - Effect: Allow
-            Action:
-              - 'ecr:GetAuthorizationToken'
-            Resource: '*'
+      Policies:
+      - PolicyName: ecr-updater
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'ecr:ListImages'
+                - 'ecr:BatchGetImage'
+              Resource: !Sub 'arn:${AWS::Partition}:ecr:${AWS::Region}:${AWS::AccountId}:repository/*'
+            - Effect: Allow
+              Action:
+                - 'ecr:GetAuthorizationToken'
+              Resource: '*'
