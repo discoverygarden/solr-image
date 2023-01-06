@@ -5,11 +5,15 @@
 replicaCount: 1
 
 activemq:
-  image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/activemq:5.16.2-alpine
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/activemq
+    tag: 5.16.2-alpine
   replicas: 2
 
 drupal:
-  image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal:9.x-manage
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal
+    tag: 9.x-manage
   db.name: 
   db.user:
   trust.hosts:
@@ -22,26 +26,34 @@ drupal:
   clamav.host:
 
 alpaca:
-  image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/alpaca:2.2.0
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/alpaca
+    tag: 2.2.0
   activemq.host:
   replicas:
 
 memcache:
-  image: 
+  image:
     repository: memcached
     tag: 1.6.16-alpine
   replicas:
 
 crayfish:
-  image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/crayfish:3.x
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/crayfish
+    tag: 3.x
   replicas:
 
 solr:
-  image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/solr:8.9.0-alpine
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/solr
+    tag: 8.9.0-alpine
   replicas:
 
 cantaloupe:
-  image: 231224489621.dkr.ecr.us-east-1.amazonaws.com/cantaloupe:4.1.9-tomcat9.0.69
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/cantaloupe
+    tag: 4.1.9-tomcat9.0.69
   replicas:
 
 # ingress:
