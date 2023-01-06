@@ -27,7 +27,9 @@ alpaca:
   replicas:
 
 memcache:
-  image: memcached:1.6.16-alpine
+  image: 
+    repository: memcached
+    tag: 1.6.16-alpine
   replicas:
 
 crayfish:
