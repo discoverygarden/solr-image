@@ -11,6 +11,10 @@
     mode: 0770
   when: not aws_cli_present.stat.exists
 
+- name: Ensure redhat depencies are installed
+  include_tasks: setup-RedHat.yml
+  when: not aws_cli_present.stat.exists
+
 - name: Ensure installer is present.
   unarchive:
     src: '{{ aws_cli_download }}'

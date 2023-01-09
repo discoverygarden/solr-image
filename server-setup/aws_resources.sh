@@ -89,6 +89,7 @@ create-cloudformation(){
     aws cloudformation deploy \
         --template-file cloudformation/iam_resources.yaml \
         --stack-name container-resources \
+        --capabilities CAPABILITY_IAM \
         --no-paginate
 
     echo Deploying host specific resources
@@ -126,3 +127,4 @@ fi
 
 create-encryption-key
 create-cloudformation
+
