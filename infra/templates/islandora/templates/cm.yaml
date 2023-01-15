@@ -1,3 +1,0 @@
-php.ini: |
-  xyz = abc
-  pqr = {{ .Values.phpini.pqr }}

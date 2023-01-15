@@ -8,56 +8,73 @@ activemq:
   image:
     repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/activemq
     tag: 5.16.2-alpine
-  replicas: 2
+    pullSecret: regcred
+  replicas: 1
 
 drupal:
   image:
     repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal
     tag: 9.x-manage
-  db.name: 
-  db.user:
-  trust.hosts:
-  postgres.host:
-  memcached.host:
-  solr.host:
-  solr.user:
-  activemq.host:
-  config_splits:
-  clamav.host:
+    pullSecret: regcred
+  dbName: drupal
+  dbUser: drupal
+  trustedHosts: '["drupal.dgi","svc-drupal.default.svc.cluster.local","localhost"]'
+  solrUser: drupal
+  config_splits: |
+    {
+      "prod": true,
+      "dev": fale
+    }
 
 alpaca:
   image:
     repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/alpaca
     tag: 2.2.0
-  activemq.host:
-  replicas:
+    pullSecret: regcred
+  replicas: 1
 
 memcache:
   image:
     repository: memcached
     tag: 1.6.16-alpine
-  replicas:
+  replicas: 1
 
 crayfish:
   image:
     repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/crayfish
     tag: 3.x
-  replicas:
+    pullSecret: regcred
+  replicas: 1
 
 solr:
   image:
     repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/solr
     tag: 8.9.0-alpine
-  replicas:
+    pullSecret: regcred
+  replicas: 1
 
 cantaloupe:
   image:
     repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/cantaloupe
     tag: 4.1.9-tomcat9.0.69
-  replicas:
+    pullSecret: regcred
+  replicas: 1
 
-# ingress:
-#   enabled: false
+postgres:
+  image:
+    repository: postgres
+    tag: 12.13
+
+clamav:
+  image:
+    repository: clamav/clamav
+    tag: 1.0.0
+  replicas: 1
+
+ingress:
+  enabled: true
+  host: drupal.dgi
+  port: 32570
 #   annotations: {}
 #     # kubernetes.io/ingress.class: nginx
 #     # kubernetes.io/tls-acme: "true"

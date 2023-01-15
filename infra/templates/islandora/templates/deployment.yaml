@@ -1,65 +1,3 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: {{ include "islandora.fullname" . }}
-#   labels:
-#     {{- include "islandora.labels" . | nindent 4 }}
-# spec:
-# {{- if not .Values.autoscaling.enabled }}
-#   replicas: {{ .Values.replicaCount }}
-# {{- end }}
-#   selector:
-#     matchLabels:
-#       {{- include "islandora.selectorLabels" . | nindent 6 }}
-#   template:
-#     metadata:
-#     {{- with .Values.podAnnotations }}
-#       annotations:
-#         {{- toYaml . | nindent 8 }}
-#     {{- end }}
-#       labels:
-#         {{- include "islandora.selectorLabels" . | nindent 8 }}
-#     spec:
-#       {{- with .Values.imagePullSecrets }}
-#       imagePullSecrets:
-#         {{- toYaml . | nindent 8 }}
-#       {{- end }}
-#       serviceAccountName: {{ include "islandora.serviceAccountName" . }}
-#       securityContext:
-#         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-#       containers:
-#         - name: {{ .Chart.Name }}
-#           securityContext:
-#             {{- toYaml .Values.securityContext | nindent 12 }}
-#           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-#           imagePullPolicy: {{ .Values.image.pullPolicy }}
-#           ports:
-#             - name: http
-#               containerPort: 80
-#               protocol: TCP
-#           livenessProbe:
-#             httpGet:
-#               path: /
-#               port: http
-#           readinessProbe:
-#             httpGet:
-#               path: /
-#               port: http
-#           resources:
-#             {{- toYaml .Values.resources | nindent 12 }}
-#       {{- with .Values.nodeSelector }}
-#       nodeSelector:
-#         {{- toYaml . | nindent 8 }}
-#       {{- end }}
-#       {{- with .Values.affinity }}
-#       affinity:
-#         {{- toYaml . | nindent 8 }}
-#       {{- end }}
-#       {{- with .Values.tolerations }}
-#       tolerations:
-#         {{- toYaml . | nindent 8 }}
-#       {{- end }}
-# ---
 ## ACTIVEMQ
 
 apiVersion: apps/v1
@@ -69,9 +7,6 @@ metadata:
     component: activemq
   name: activemq
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.activemq.replicas }}
@@ -86,7 +21,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: activemq
     spec:
@@ -100,6 +34,10 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+      {{ if .Values.activemq.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.activemq.image.pullSecret}}
+      {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -118,9 +56,6 @@ metadata:
     component: alpaca
   name: alpaca
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.alpaca.replicas }}
@@ -135,7 +70,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: alpaca
     spec:
@@ -151,15 +85,127 @@ spec:
         terminationMessagePolicy: File
         env:
           - name: ACTIVEMQ_HOST
-            value: {{ .Values.alpaca.activemq.host }}
+            value: svc-activemq.{{ .Release.Namespace }}.svc.cluster.local
           - name: ACTIVEMQ_JMS_PORT
-            value: 61616
+            value: '61616'
           - name: HOMARUS_URL
-            value: 'http://crayfish/homarus/convert'
+            value: http://svc-crayfish.{{ .Release.Namespace }}.svc.cluster.local/homarus/convert
           - name: HOUDINI_URL
-            value: 'http://crayfish/houdini/convert'
+            value: 'http://svc-crayfish.{{ .Release.Namespace }}.svc.cluster.local/houdini/convert'
           - name: HYPERCUBE_URL
-            value: 'http://crayfish/hypercube'
+            value: 'http://svc-crayfish.{{ .Release.Namespace }}.svc.cluster.local/hypercube'
+      {{ if .Values.alpaca.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.alpaca.image.pullSecret}}
+      {{- end }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## CLAMAV
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: clamav
+  name: clamav
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.clamav.replicas }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: clamav
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        component: clamav
+    spec:
+      containers:
+      - image: "{{ .Values.clamav.image.repository }}:{{ .Values.clamav.image.tag }}"
+        imagePullPolicy: Always
+        name: clamav
+        ports:
+        - containerPort: 3310
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      {{ if .Values.clamav.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.clamav.image.pullSecret}}
+      {{- end }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
+
+---
+## DB
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: db
+  name: postgresql
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: db
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        component: db
+    spec:
+      containers:
+      - image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+        imagePullPolicy: Always
+        name: postgres
+        ports:
+        - containerPort: 8181
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: drupal-db
+                key: password
+          - name: POSTGRES_USER
+            value: {{ .Values.drupal.dbUser }}
+          - name: POSTGRES_DB
+            value: {{ .Values.drupal.dbName }}
+          - name: POSTGRES_INITDB_ARGS
+            value: -E UTF-8
+      {{ if .Values.postgres.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.postgres.image.pullSecret}}
+      {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -172,15 +218,12 @@ status: {}
 ## DRUPAL
 
 apiVersion: apps/v1
-kind:  
+kind:  Deployment
 metadata:
   labels:
     component: drupal
   name: drupal
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.drupal.replicas }}
@@ -195,7 +238,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: drupal
     spec:
@@ -211,51 +253,63 @@ spec:
         terminationMessagePolicy: File
         env:
           - name: DRUPAL_DB_NAME
-            value: {{ .Values.drupal.db.name }}
+            value: {{ .Values.drupal.dbName }}
           - name: DRUPAL_DB_USER
-            value: {{ .Values.drupal.db.user }}
+            value: {{ .Values.drupal.dbUser }}
           - name: DRUPAL_TRUSTED_HOSTS
-            value: {{ .Values.drupal.trust.hosts }}
+            value: {{ .Values.drupal.trustedHosts | quote }}
           - name: POSTGRES_HOST
-            value: {{ .Values.drupal.postgres.host }}
+            value: svc-db.{{ .Release.Namespace }}.svc.cluster.local
           - name: MEMCACHED_HOST
-            value: {{ .Values.drupal.memcached.host }}
+            value: svc-memcached.{{ .Release.Namespace }}.svc.cluster.local
           - name: MEMCACHED_PORT
-            value: 11211
+            value: '11211'
           - name: SOLR_HOST
-            value: {{ .Values.drupal.solr.host }}
+            value: svc-solr.{{ .Release.Namespace }}.svc.cluster.local
           - name: SOLR_USERNAME
-            value: {{ .Values.drupal.solr.user }}
+            value: {{ .Values.drupal.solrUser }}
           - name: JWT_KEY_TYPE
             value: RS256
-          ## TODO: Create a secret for the below key and mount it here to the pod as volume
           - name: JWT_KEY_FILE
-            value: ${JWT_KEY_FILE}
+            value: /run/secrets/crayfish/default.key
           - name: IIIF_URL
-            value: ${IIIF_URL}
+            value: http://svc-cantaloupe.{{ .Release.Namespace }}.svc.cluster.local:8080/cantaloupe/iiif/2
           - name: IIIF_INGRESS_URL
-            value: ${IIIF_INGRESS_URL}
+            value: http://{{ .Values.ingress.host }}:{{ .Values.ingress.port }}/iiif/2
           - name: ACTIVEMQ_HOST
-            value: {{ .Values.drupal.activemq.host }}
+            value: svc-activemq.{{ .Release.Namespace }}.svc.cluster.local
           - name: ACTIVEMQ_STOMP_PORT
-            value: 61613
+            value: '61613'
           - name: CONFIG_SPLITS
-            value: {{ .Values.drupal.activemq.config_splits }}
+            value: {{ .Values.drupal.config_splits | quote }}
           - name: CLAMAV_HOST
-            value: {{ .Values.drupal.clamav.host }}
+            value: svc-clamav.{{ .Release.Namespace }}.svc.cluster.local
           - name: CLAMAV_PORT
-            value: 3310
-        envFrom:
-          - name: DRUPAL_DB_PASSWORD 
+            value: '3310'
+          - name: DRUPAL_DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: drupal_db 
-                key: drupal_db_pwd
+                name: drupal-db
+                key: password
           - name: SOLR_PASSWORD
-             valueFrom:
+            valueFrom:
               secretKeyRef:
-                name: solr_password 
-                key: solr_pwd
+                name: solr-auth
+                key: password
+        volumeMounts:
+        - name: crayfish-key
+          mountPath: /run/secrets/crayfish
+      {{ if .Values.drupal.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.drupal.image.pullSecret}}
+      {{- end }}
+      volumes:
+      - name: crayfish-key
+        secret:
+          secretName: crayfish-key
+          items:
+          - key: private
+            path: default.key
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -274,9 +328,6 @@ metadata:
     component: memcache
   name: memcache
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.memcache.replicas }}
@@ -291,7 +342,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: memcache
     spec:
@@ -305,6 +355,10 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+      {{ if .Values.memcache.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.memcache.image.pullSecret}}
+      {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -323,9 +377,6 @@ metadata:
     component: crayfish
   name: crayfish
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.crayfish.replicas }}
@@ -340,7 +391,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: crayfish
     spec:
@@ -354,6 +404,29 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - name: crayfish-key
+          mountPath: /run/secrets/keys
+        - name: crayfish-syn-settings
+          mountPath: /opt/www/crayfish/syn-settings.xml
+          subPath: syn-settings.xml
+      {{ if .Values.crayfish.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.crayfish.image.pullSecret}}
+      {{- end }}
+      volumes:
+      - name: crayfish-key
+        secret:
+          secretName: crayfish-key
+          items:
+          - key: public
+            path: default.pub
+      - name: crayfish-syn-settings
+        configMap:
+          name: crayfish-syn-settings
+          items:
+          - key: syn-settings
+            path: syn-settings.xml
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -371,9 +444,6 @@ metadata:
     component: solr
   name: solr
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.solr.replicas }}
@@ -388,7 +458,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: solr
     spec:
@@ -402,6 +471,10 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+      {{ if .Values.solr.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.solr.image.pullSecret}}
+      {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -419,9 +492,6 @@ metadata:
     component: cantaloupe
   name: cantaloupe
   namespace: default
-  resourceVersion: "15123"
-  selfLink: /apis/apps/v1/namespaces/default/deployments/drupal
-  uid: d1a6cc68-a50d-4306-9d5a-c19d6d3eb3f7
 spec:
   progressDeadlineSeconds: 600
   replicas: {{ .Values.cantaloupe.replicas }}
@@ -436,7 +506,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: cantaloupe
     spec:
@@ -450,6 +519,21 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - name: cantaloupe-info
+          mountPath: /opt/cantaloupe_configs/info.yaml
+          subPath: info.yaml
+      {{ if .Values.cantaloupe.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.cantaloupe.image.pullSecret}}
+      {{- end }}
+      volumes:
+      - name: cantaloupe-info
+        configMap:
+          name: cantaloupe-info-{{ .Release.Revision }}
+          items:
+          - key: info
+            path: info.yaml
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
