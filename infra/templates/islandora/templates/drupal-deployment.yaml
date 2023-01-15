@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind:  Deployment
+metadata:
+  labels:
+    component: drupal
+  name: drupal
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.drupal.replicas }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: drupal
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        component: drupal
+    spec:
+      containers:
+      - image: "{{ .Values.drupal.image.repository }}:{{ .Values.drupal.image.tag }}"
+        imagePullPolicy: Always
+        name: drupal
+        ports: 
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        env:
+          - name: DRUPAL_DB_NAME
+            value: {{ .Values.drupal.dbName }}
+          - name: DRUPAL_DB_USER
+            value: {{ .Values.drupal.dbUser }}
+          - name: DRUPAL_TRUSTED_HOSTS
+            value: {{ .Values.drupal.trustedHosts | quote }}
+          - name: POSTGRES_HOST
+            value: svc-db.{{ .Release.Namespace }}.svc.cluster.local
+          - name: MEMCACHED_HOST
+            value: svc-memcached.{{ .Release.Namespace }}.svc.cluster.local
+          - name: MEMCACHED_PORT
+            value: '11211'
+          - name: SOLR_HOST
+            value: svc-solr.{{ .Release.Namespace }}.svc.cluster.local
+          - name: SOLR_USERNAME
+            value: {{ .Values.drupal.solrUser }}
+          - name: JWT_KEY_TYPE
+            value: RS256
+          - name: JWT_KEY_FILE
+            value: /run/secrets/crayfish/default.key
+          - name: IIIF_URL
+            value: http://svc-cantaloupe.{{ .Release.Namespace }}.svc.cluster.local:8080/cantaloupe/iiif/2
+          - name: IIIF_INGRESS_URL
+            value: http://{{ .Values.ingress.host }}:{{ .Values.ingress.port }}/iiif/2
+          - name: ACTIVEMQ_HOST
+            value: svc-activemq.{{ .Release.Namespace }}.svc.cluster.local
+          - name: ACTIVEMQ_STOMP_PORT
+            value: '61613'
+          - name: CONFIG_SPLITS
+            value: {{ .Values.drupal.config_splits | quote }}
+          - name: CLAMAV_HOST
+            value: svc-clamav.{{ .Release.Namespace }}.svc.cluster.local
+          - name: CLAMAV_PORT
+            value: '3310'
+          - name: DRUPAL_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: drupal-db
+                key: password
+          - name: SOLR_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: solr-auth
+                key: password
+        volumeMounts:
+        - name: crayfish-key
+          mountPath: /run/secrets/crayfish
+      {{ if .Values.drupal.image.pullSecret -}}
+      imagePullSecrets:
+       - name: {{ .Values.drupal.image.pullSecret}}
+      {{- end }}
+      volumes:
+      - name: crayfish-key
+        secret:
+          secretName: crayfish-key
+          items:
+          - key: private
+            path: default.key
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}
