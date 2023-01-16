@@ -11,6 +11,19 @@ Get a list of trusted hostnames
 {{- end }}
 
 {{/*
+Get the ingress port
+*/}}
+{{- define "islandora.ingressPort" -}}
+{{- $traefikService := 	lookup "v1" "Service" "traefik" "traefik" -}}
+{{ range $traefikService.spec.ports }}
+    {{- if eq .name "web" -}}
+        {{-  .nodePort | toString -}}
+    {{- end -}}
+{{ end }}
+{{- end }}
+
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "islandora.name" -}}

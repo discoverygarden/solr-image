@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled }}
 1. Get the application URL by running these commands:
-  http://{{ .Values.ingress.host}}:{{ .Values.ingress.port }}
+  http://{{ .Values.ingress.host}}:{{ template "islandora.ingressPort" . }}
 {{- end }}
 {{/*
 {{- else if contains "NodePort" .Values.service.type }}
