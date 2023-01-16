@@ -18,13 +18,10 @@ drupal:
     pullSecret: regcred
   dbName: drupal
   dbUser: drupal
-  trustedHosts: '["drupal.dgi","svc-drupal.default.svc.cluster.local","localhost"]'
   solrUser: drupal
-  config_splits: |
-    {
-      "prod": true,
-      "dev": fale
-    }
+  config_splits:
+    prod: true
+    dev: false
 
 alpaca:
   image:

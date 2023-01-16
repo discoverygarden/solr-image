@@ -38,7 +38,7 @@ spec:
           - name: DRUPAL_DB_USER
             value: {{ .Values.drupal.dbUser }}
           - name: DRUPAL_TRUSTED_HOSTS
-            value: {{ .Values.drupal.trustedHosts | quote }}
+            value: {{ template "islandora.trustedHosts" . }}
           - name: POSTGRES_HOST
             value: svc-db.{{ .Release.Namespace }}.svc.cluster.local
           - name: MEMCACHED_HOST
@@ -62,7 +62,7 @@ spec:
           - name: ACTIVEMQ_STOMP_PORT
             value: '61613'
           - name: CONFIG_SPLITS
-            value: {{ .Values.drupal.config_splits | quote }}
+            value: {{ .Values.drupal.config_splits | toJson | quote }}
           - name: CLAMAV_HOST
             value: svc-clamav.{{ .Release.Namespace }}.svc.cluster.local
           - name: CLAMAV_PORT
