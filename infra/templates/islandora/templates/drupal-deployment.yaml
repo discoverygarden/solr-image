@@ -33,79 +33,18 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         env:
-          - name: DRUPAL_DB_NAME
-            value: {{ .Values.drupal.dbName }}
-          - name: DRUPAL_DB_USER
-            value: {{ .Values.drupal.dbUser }}
-          - name: DRUPAL_TRUSTED_HOSTS
-            value: {{ template "islandora.trustedHosts" . }}
-          - name: POSTGRES_HOST
-            value: svc-db.{{ .Release.Namespace }}.svc.cluster.local
-          - name: MEMCACHED_HOST
-            value: svc-memcached.{{ .Release.Namespace }}.svc.cluster.local
-          - name: MEMCACHED_PORT
-            value: '11211'
-          - name: SOLR_HOST
-            value: svc-solr.{{ .Release.Namespace }}.svc.cluster.local
-          - name: SOLR_USERNAME
-            value: {{ .Values.drupal.solrUser }}
-          - name: JWT_KEY_TYPE
-            value: RS256
-          - name: JWT_KEY_FILE
-            value: /run/secrets/crayfish/default.key
-          - name: IIIF_URL
-            value: http://svc-cantaloupe.{{ .Release.Namespace }}.svc.cluster.local:8080/cantaloupe/iiif/2
-          - name: IIIF_INGRESS_URL
-            value: http://{{ .Values.ingress.host }}:{{ template "islandora.ingressPort" . }}/iiif/2
-          - name: ACTIVEMQ_HOST
-            value: svc-activemq.{{ .Release.Namespace }}.svc.cluster.local
-          - name: ACTIVEMQ_STOMP_PORT
-            value: '61613'
-          - name: CONFIG_SPLITS
-            value: {{ .Values.drupal.config_splits | toJson | quote }}
-          - name: CLAMAV_HOST
-            value: svc-clamav.{{ .Release.Namespace }}.svc.cluster.local
-          - name: CLAMAV_PORT
-            value: '3310'
-          - name: DRUPAL_DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: drupal-db
-                key: password
-          - name: SOLR_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: solr-auth
-                key: password
+{{ include "islandora.drupalEnv" . | indent 8 }}
+        envFrom:
+        - configMapRef:
+            name: drupal-env
         volumeMounts:
-        - name: crayfish-key
-          mountPath: /run/secrets/crayfish
-        - name: public-filesystem
-          mountPath: /opt/www/drupal/web/sites/default/files
-        - name: private-filesystem
-          mountPath: /opt/drupal_private_filesystem/d8/default
-        - name: islandora-data
-          mountPath: /opt/islandora_data
+{{ include "islandora.drupalVolumeMounts" . | indent 8 }}
       {{ if .Values.drupal.image.pullSecret -}}
       imagePullSecrets:
        - name: {{ .Values.drupal.image.pullSecret}}
       {{- end }}
       volumes:
-      - name: crayfish-key
-        secret:
-          secretName: crayfish-key
-          items:
-          - key: private
-            path: default.key
-      - name: public-filesystem
-        persistentVolumeClaim:
-          claimName: drupal-public-claim
-      - name: private-filesystem
-        persistentVolumeClaim:
-          claimName: drupal-private-claim
-      - name: islandora-data
-        persistentVolumeClaim:
-          claimName: drupal-islandora-data-claim
+{{ include "islandora.drupalVolumes" . | indent 6 }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
