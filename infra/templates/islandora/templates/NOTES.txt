@@ -19,3 +19,11 @@
 {{- end }}
 
 */}}
+{{- if eq .Values.storage.type "local" }}
+2. Verify that the host path volumes are have the correct permissions
+{{ range $index, $pv := (lookup "v1" "PersistentVolume" .Release.Namespace "" ).items}}
+{{- if $pv.spec.hostPath }}
+{{ $pv.spec.hostPath.path }}
+{{- end -}}
+{{ end }}
+{{- end -}}
