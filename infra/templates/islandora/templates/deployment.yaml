@@ -91,7 +91,7 @@ spec:
         component: activemq
     spec:
       containers:
-      - image: {{ .Values.activemq.image }}
+      - image: "{{ .Values.activemq.image.repository }}:{{ .Values.activemq.image.tag }}"
         imagePullPolicy: Always
         name: activemq
         ports: 
@@ -140,7 +140,7 @@ spec:
         component: alpaca
     spec:
       containers:
-      - image: {{ .Values.alpaca.image }}
+      - image: "{{ .Values.alpaca.image.repository }}:{{ .Values.alpaca.image.tag }}"
         imagePullPolicy: Always
         name: alpaca
         ports: 
@@ -200,7 +200,7 @@ spec:
         component: drupal
     spec:
       containers:
-      - image: {{ .Values.drupal.image }}
+      - image: "{{ .Values.drupal.image.repository }}:{{ .Values.drupal.image.tag }}"
         imagePullPolicy: Always
         name: drupal
         ports: 
@@ -296,7 +296,7 @@ spec:
         component: memcache
     spec:
       containers:
-      - image: {{ .Values.memcache.image }}
+      - image: "{{ .Values.memcache.image.repository }}:{{ .Values.memcache.image.tag }}"
         imagePullPolicy: Always
         name: memcache
         ports: 
@@ -345,7 +345,7 @@ spec:
         component: crayfish
     spec:
       containers:
-      - image: {{ .Values.crayfish.image }}
+      - image: "{{ .Values.crayfish.image.repository }}:{{ .Values.crayfish.image.tag }}"
         imagePullPolicy: Always
         name: crayfish
         ports: 
@@ -393,7 +393,7 @@ spec:
         component: solr
     spec:
       containers:
-      - image: {{ .Values.solr.image }}
+      - image: "{{ .Values.solr.image.repository }}:{{ .Values.solr.image.tag }}"
         imagePullPolicy: Always
         name: solr
         ports: 
@@ -441,7 +441,7 @@ spec:
         component: cantaloupe
     spec:
       containers:
-      - image: {{ .Values.cantaloupe.image }}
+      - image: "{{ .Values.cantaloupe.image.repository }}:{{ .Values.cantaloupe.image.tag }}"
         imagePullPolicy: Always
         name: cantaloupe
         ports: 
