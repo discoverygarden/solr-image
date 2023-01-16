@@ -80,6 +80,12 @@ spec:
         volumeMounts:
         - name: crayfish-key
           mountPath: /run/secrets/crayfish
+        - name: public-filesystem
+          mountPath: /opt/www/drupal/web/sites/default/files
+        - name: private-filesystem
+          mountPath: /opt/drupal_private_filesystem/d8/default
+        - name: islandora-data
+          mountPath: /opt/islandora_data
       {{ if .Values.drupal.image.pullSecret -}}
       imagePullSecrets:
        - name: {{ .Values.drupal.image.pullSecret}}
@@ -91,6 +97,15 @@ spec:
           items:
           - key: private
             path: default.key
+      - name: public-filesystem
+        persistentVolumeClaim:
+          claimName: drupal-public-claim
+      - name: private-filesystem
+        persistentVolumeClaim:
+          claimName: drupal-private-claim
+      - name: islandora-data
+        persistentVolumeClaim:
+          claimName: drupal-islandora-data-claim
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

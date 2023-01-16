@@ -32,10 +32,17 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - name: data
+          mountPath: /var/solr/data/islandora8/data
       {{ if .Values.solr.image.pullSecret -}}
       imagePullSecrets:
        - name: {{ .Values.solr.image.pullSecret}}
       {{- end }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: solr-data-claim
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

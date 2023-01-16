@@ -44,6 +44,9 @@ spec:
             value: {{ .Values.drupal.dbName }}
           - name: POSTGRES_INITDB_ARGS
             value: -E UTF-8
+        volumeMounts:
+        - mountPath: '/var/lib/postgresql/data'
+          name: data
       {{ if .Values.postgres.image.pullSecret -}}
       imagePullSecrets:
        - name: {{ .Values.postgres.image.pullSecret}}
@@ -53,4 +56,8 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: postgres-data-claim
 status: {}

@@ -1,0 +1,18 @@
+{{- if eq .Values.storage.type "local" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-data
+  labels:
+    component: postgres
+    usage: data
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.storage.basePath }}/{{ .Release.Name }}/db
+    type: DirectoryOrCreate
+{{- end}}
