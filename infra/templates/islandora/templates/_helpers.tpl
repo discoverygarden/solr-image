@@ -15,10 +15,12 @@ Get the ingress port
 */}}
 {{- define "islandora.ingressPort" -}}
 {{- $traefikService := 	lookup "v1" "Service" "traefik" "traefik" -}}
+{{- if $traefikService -}}
 {{ range $traefikService.spec.ports }}
     {{- if eq .name "web" -}}
         {{-  .nodePort | toString -}}
     {{- end -}}
+{{- end -}}
 {{ end }}
 {{- end }}
 
