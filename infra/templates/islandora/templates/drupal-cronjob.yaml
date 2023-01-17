@@ -27,7 +27,7 @@ spec:
                 - '/bin/bash'
                 - '-c'
                 - |
-                    sudo -Eu www-data drush --uri=http://{{ .Values.ingress.host }}:{ template "islandora.ingressHost" } core:cron --quiet
+                    sudo -Eu www-data drush --uri=http://{{ .Values.ingress.host }}:{{ template "islandora.ingressPort" . }} core:cron --quiet
             env:
 {{ include "islandora.drupalEnv" . | indent 12 }}
             envFrom:

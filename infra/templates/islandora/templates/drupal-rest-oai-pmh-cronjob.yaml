@@ -27,7 +27,7 @@ spec:
                 - '/bin/bash'
                 - '-c'
                 - |
-                    sudo -Eu www-data drush --uri=http://{{ .Values.ingress.host }}:{ template "islandora.ingressHost" } --debug php:eval "rest_oai_pmh_rebuild_entries()
+                    sudo -Eu www-data drush --uri=http://{{ .Values.ingress.host }}:{{ template "islandora.ingressPort" . }} --debug php:eval "rest_oai_pmh_rebuild_entries()"
             env:
 {{ include "islandora.drupalEnv" . | indent 12 }}
             envFrom:
