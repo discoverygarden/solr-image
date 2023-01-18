@@ -25,7 +25,7 @@
       changed_when: false
       become: true
       become_user: '{{ user }}'
-      no_log: true
+      no_log: '{{ not no_no_log }}'
   rescue:
     - name: Create credentials.
       community.aws.iam_access_key:
@@ -34,7 +34,7 @@
         profile: '{{ local_profile }}'
       register: credentials
       delegate_to: localhost
-      no_log: true
+      no_log: '{{ not no_no_log }}'
 
     - name: Set credentials
       template:
@@ -45,4 +45,4 @@
         group: '{{ user }}'
       become: true
       notify: 'AWS credentials updated'
-      no_log: true
+      no_log: '{{ not no_no_log }}'
