@@ -6,3 +6,8 @@ microk8s_path: /var/lib/snapd/snap/bin/microk8s
 microk8s_addons:
   - dns
   - dashboard
+  - community
+  - traefik
+
+users:
+  - '{{ ansible_user_id }}'

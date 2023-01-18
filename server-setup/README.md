@@ -28,3 +28,12 @@ to run the playbook on. For example:
 ansible-playbook microk8s.yml --inventory=inventory   -l dev-alexander
 ```
 Will only run the playbook against the `dev-alexander` group.
+
+To add more users to the microk8s group add them to the `users` list.
+
+EX:
+```yaml
+users:
+  - alexander
+  - luke
+```
