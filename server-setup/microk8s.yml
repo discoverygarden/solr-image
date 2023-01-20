@@ -1,0 +1,5 @@
+---
+- name: Install microk8s
+  hosts: microk8s
+  roles:
+    - microk8s
