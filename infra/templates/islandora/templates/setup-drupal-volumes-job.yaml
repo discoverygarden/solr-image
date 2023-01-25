@@ -33,12 +33,6 @@ spec:
                 chown -R www-data:www-data /opt/islandora_data
         env:
 {{ include "islandora.drupalEnv" . | indent 8 }}
-        - name: DRUPAL_USER
-          value: islandora
-        - name: DRUPAL_USER_PASS
-          value: islandora
-        - name: DRUPAL_SITE_EMAIL
-          value: noreplysys@discoverygarden.ca
         envFrom:
         - configMapRef:
             name: drupal-env
