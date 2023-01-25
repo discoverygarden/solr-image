@@ -1,4 +1,4 @@
-{{- if (and .Values.init.setup_volumes.permissions  ( eq .Values.storage.type "hostPath" ) ) }}
+{{- if (and .Values.init.setupVolumes.permissions  ( eq .Values.storage.type "hostPath" ) ) }}
 apiVersion: batch/v1
 kind: Job
 metadata:

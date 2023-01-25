@@ -88,7 +88,7 @@ storage:
   basePath: /var/local/dgi-k8s/volumes
 
 init:
-  setup_volumes:
+  setupVolumes:
     permissions: true
   installSite: true
 
