@@ -1,3 +1,4 @@
+{{- if and .Values.init.installSite }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -61,4 +62,4 @@ spec:
       {{- end }}
       volumes:
 {{ include "islandora.drupalVolumes" . | indent 6 }}
-
+{{- end }}
