@@ -1,3 +1,4 @@
+{{- if (and .Values.init.setup_volumes.permissions  ( eq .Values.storage.type "hostPath" ) ) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -44,4 +45,4 @@ spec:
       {{- end }}
       volumes:
 {{ include "islandora.drupalVolumes" . | indent 6 }}
-
+{{- end }}

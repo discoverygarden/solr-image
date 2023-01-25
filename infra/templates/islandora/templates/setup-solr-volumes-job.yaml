@@ -1,3 +1,4 @@
+{{- if (and .Values.init.setup_volumes.permissions  ( eq .Values.storage.type "hostPath" ) ) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -32,3 +33,4 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: solr-data-claim
+{{- end }}
