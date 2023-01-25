@@ -84,7 +84,7 @@ ingress:
 #   #      - chart-example.local
 
 storage:
-  type: local
+  type: hostPath
   basePath: /var/local/dgi-k8s/volumes
 
 resources: {}
