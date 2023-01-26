@@ -5,10 +5,15 @@
 replicaCount: 1
 
 activemq:
-  image: image-name:xx
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/activemq
+    tag: 5.16.2-alpine
   replicas: 2
 
 drupal:
+  image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal
+    tag: 9.x-manage
   db.name: 
   db.user:
   trust.hosts:
@@ -22,23 +27,33 @@ drupal:
 
 alpaca:
   image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/alpaca
+    tag: 2.2.0
   activemq.host:
   replicas:
 
 memcache:
   image:
+    repository: memcached
+    tag: 1.6.16-alpine
   replicas:
 
 crayfish:
   image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/crayfish
+    tag: 3.x
   replicas:
 
 solr:
   image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/solr
+    tag: 8.9.0-alpine
   replicas:
 
 cantaloupe:
   image:
+    repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/cantaloupe
+    tag: 4.1.9-tomcat9.0.69
   replicas:
 
 # ingress:

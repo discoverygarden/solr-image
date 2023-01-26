@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "infra/templates/islandora"
+    schedule:
+      interval: "daily"
+    registries: "*"
+registries:
+  ecr-docker:
+    type: docker-registry
+    url: https://231224489621.dkr.ecr.us-east-1.amazonaws.com
+    username: ${{secrets.ECR_AWS_ACCESS_KEY_ID}}
+    password: ${{secrets.ECR_AWS_SECRET_ACCESS_KEY}}
