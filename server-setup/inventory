@@ -1,0 +1,7 @@
+localhost   ansible_connection=local
+
+[microk8s:children]
+dev-alexander
+
+[dev-alexander]
+micro.doge.irish remote_user=alexander
