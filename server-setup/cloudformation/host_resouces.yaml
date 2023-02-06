@@ -10,5 +10,6 @@ Resources:
     Type: AWS::IAM::User
     Properties:
       ManagedPolicyArns:
-        - !ImportValue EcrReadOnly
+        - !ImportValue EcrReadOnlyPolicy
+        - !ImportValue EcrAuthPolicy
       UserName: !Sub ${Hostname}-microk8s
