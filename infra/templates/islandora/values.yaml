@@ -84,8 +84,13 @@ ingress:
 #   #      - chart-example.local
 
 storage:
-  type: local
+  type: hostPath
   basePath: /var/local/dgi-k8s/volumes
+
+init:
+  setupVolumes:
+    permissions: true
+  installSite: true
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

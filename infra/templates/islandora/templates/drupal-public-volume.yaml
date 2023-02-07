@@ -1,4 +1,4 @@
-{{- if eq .Values.storage.type "local" }}
+{{- if eq .Values.storage.type "hostPath" }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
