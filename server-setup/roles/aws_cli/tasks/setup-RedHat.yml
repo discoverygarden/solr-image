@@ -1,0 +1,7 @@
+---
+- name: Install dependencies
+  dnf:
+    name: unzip
+    state: present
+  become: true
+

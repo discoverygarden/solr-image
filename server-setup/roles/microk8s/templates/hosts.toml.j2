@@ -1,0 +1,4 @@
+server = "{{ item.uri }}"
+
+[host."{{ item.uri }}"]
+capabilities = ["pull", "resolve"]
