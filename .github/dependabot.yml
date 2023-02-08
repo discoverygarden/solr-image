@@ -11,6 +11,7 @@ updates:
     schedule:
       interval: "daily"
     registries: "*"
+  - package-ecosystem: "docker"
     directory: "activemq-alpine"
     schedule:
       interval: "daily"
