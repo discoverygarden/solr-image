@@ -1,5 +1,31 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
+Get a list of trusted hostnames
+*/}}
+{{- define "islandora.trustedHosts" -}}
+{{- $serviceName := "svc-drupal" -}}
+{{- $namespaced := print $serviceName "." .Release.Namespace  -}}
+{{- $fullName := print $namespaced ".svc.cluster.local" -}}
+{{- $baseNames := list "localhost" $serviceName $namespaced $fullName -}}
+{{ .Values.ingress.host | append $baseNames | toJson | quote }}
+{{- end }}
+
+{{/*
+Get the ingress port
+*/}}
+{{- define "islandora.ingressPort" -}}
+{{- $traefikService := 	lookup "v1" "Service" "traefik" "traefik" -}}
+{{- if $traefikService -}}
+{{ range $traefikService.spec.ports }}
+    {{- if eq .name "web" -}}
+        {{-  .nodePort | toString -}}
+    {{- end -}}
+{{- end -}}
+{{ end }}
+{{- end }}
+
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "islandora.name" -}}
