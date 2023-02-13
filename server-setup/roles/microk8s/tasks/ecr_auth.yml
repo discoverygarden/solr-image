@@ -23,7 +23,8 @@
 - name: Ensure ECR Key is kept up to date
   cron:
     name: 'Manage ECR Key for {{ registry.name }}'
-    special_time: daily
+    minute: 0
+    hour: '*/10'
     job: /usr/bin/ecr-rotate-key.sh
     user: '{{ microk8s_user.name }}'
   become: true
