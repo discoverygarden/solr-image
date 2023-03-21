@@ -4,6 +4,7 @@ FROM alpine:3.14
 ENV OPENJDK_VERSION=11
 ENV SOLR_VERSION=8.9.0
 ENV SOLR_HOME='/var/solr/data'
+ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 ENV SOLR_HEAP=512m
 
 EXPOSE 8983
@@ -28,14 +29,12 @@ RUN curl --silent --fail -OL http://archive.apache.org/dist/lucene/solr/${SOLR_V
   && chown -R solr:solr /opt/solr-${SOLR_VERSION} /opt/solr ${SOLR_HOME} \
   && rm /solr-${SOLR_VERSION}.tgz
 
-COPY solr_islandora8_core.tgz /tmp/
+COPY islandora8 ${SOLR_CORE_DIR}
 
-RUN tar -zxvf /tmp/solr_islandora8_core.tgz -C /var/solr/data \
-  && cp /opt/solr/server/solr/solr.xml /var/solr/data/solr.xml \
+RUN cp /opt/solr/server/solr/solr.xml /var/solr/data/solr.xml \
   && cp /opt/solr/server/solr/zoo.cfg /var/solr/data/zoo.cfg \
   && cp /opt/solr/server/resources/log4j2.xml /var/solr/log4j2.xml \
-  && chown -R solr:solr /var/solr \
-  && rm /tmp/solr_islandora8_core.tgz
+  && chown -R solr:solr /var/solr
 
 # https://solr.apache.org/guide/8_9/basic-authentication-plugin.html
 COPY solr.in.sh /etc/default/solr.in.sh
@@ -44,12 +43,9 @@ COPY --chown=solr:solr \
   security.json \
   /var/solr/data/security.json
 
-COPY solr-config-9c39e420.zip /tmp/solr-config.zip
-RUN unzip -o /tmp/solr-config.zip -d /var/solr/data/islandora8/conf/ \
-    && chown -R solr:solr /var/solr/data/islandora8/conf/
 USER solr
 
-VOLUME ["/var/solr/data/islandora8/data"]
+VOLUME ["${SOLR_CORE_DIR}/data"]
 WORKDIR /opt/solr
 
 CMD ["/opt/solr/bin/solr", "-f"]
