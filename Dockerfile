@@ -1,8 +1,8 @@
 # https://solr.apache.org/guide/8_9/taking-solr-to-production.html
-FROM alpine:3.14
+FROM alpine:3.17
 
 ENV OPENJDK_VERSION=11
-ENV SOLR_VERSION=8.9.0
+ENV SOLR_VERSION=8.11.2
 ENV SOLR_HOME='/var/solr/data'
 ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 ENV SOLR_HEAP=512m
@@ -12,7 +12,8 @@ EXPOSE 8983
 # Update packages and install tools
 RUN apk add --no-cache \
     bash curl lsof \
-    openjdk${OPENJDK_VERSION}-jdk
+    openjdk${OPENJDK_VERSION}-jdk \
+    procps
 
 # NOTE: need to set JAVA_HOME, otherwise it won't be able to find the javadoc binary
 ENV JAVA_HOME="/usr/lib/jvm/java-${OPENJDK_VERSION}-openjdk"
