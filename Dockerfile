@@ -26,21 +26,24 @@ RUN addgroup --system solr \
 RUN curl --silent --fail -OL http://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz \
   && tar -zxvf solr-${SOLR_VERSION}.tgz -C /opt \
   && ln -s /opt/solr-${SOLR_VERSION} /opt/solr \
-  && mkdir -p /var/solr/data /var/solr/logs \
+  && mkdir -p ${SOLR_HOME} /var/solr/logs \
   && chown -R solr:solr /opt/solr-${SOLR_VERSION} /opt/solr ${SOLR_HOME} \
   && rm /solr-${SOLR_VERSION}.tgz
 
-COPY islandora8 ${SOLR_CORE_DIR}
+COPY --link islandora8 ${SOLR_CORE_DIR}
 
-RUN cp /opt/solr/server/solr/solr.xml /var/solr/data/solr.xml \
-  && cp /opt/solr/server/solr/zoo.cfg /var/solr/data/zoo.cfg \
+RUN cp /opt/solr/server/solr/solr.xml ${SOLR_HOME}/solr.xml \
+  && cp /opt/solr/server/solr/zoo.cfg ${SOLR_HOME}/zoo.cfg \
   && cp /opt/solr/server/resources/log4j2.xml /var/solr/log4j2.xml \
   && chown -R solr:solr /var/solr
 
-# https://solr.apache.org/guide/8_9/basic-authentication-plugin.html
-COPY solr.in.sh /etc/default/solr.in.sh
+# XXX: User and Group IDs are necessary due to an open issue with buildx: https://github.com/docker/buildx/issues/1526
+ADD --link --chown=100:101 https://github.com/dbmdz/solr-ocrhighlighting/releases/download/0.8.3/solr-ocrhighlighting-0.8.3-solr78.jar ${SOLR_HOME}/contrib/ocrhighlighting/lib/
 
-COPY --chown=solr:solr \
+# https://solr.apache.org/guide/8_9/basic-authentication-plugin.html
+COPY --link --chown=100:101 solr.in.sh /etc/default/solr.in.sh
+
+COPY --link --chown=100:101 \
   security.json \
   /var/solr/data/security.json
 
