@@ -4,7 +4,7 @@ name: Build image from version tag
 permissions:
   id-token: write
   contents: read
-  packages: write
+  # packages: write
 on:
   push:
     # XXX: Tags pushed via actions (i.e., auto-semver) are not able to trigger additional workflows;
