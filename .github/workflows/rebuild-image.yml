@@ -4,6 +4,7 @@ name: Rebuild image
 permissions:
   id-token: write
   contents: read
+  packages: write
 on:
   schedule:
     - cron: '47 4 1 * *'
