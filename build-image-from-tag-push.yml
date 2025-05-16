@@ -27,3 +27,4 @@ jobs:
     with:
       image-name: ${{ vars.DOCKER_IMAGE_NAME }}
       tag: ${{ inputs.tag }}
+
