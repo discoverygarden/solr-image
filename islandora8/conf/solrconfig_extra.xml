@@ -217,4 +217,4 @@
   7.0.0
 -->
   <searchComponent name="tvComponent" class="solr.TermVectorComponent"/>
-<lib dir="/opt/solr/contrib/ocrhighlighting/lib" regex=".*\.jar" />
+<lib dir="${solr.hocr.plugin.path:/opt/solr/contrib/ocrhighlighting/lib}" regex=".*\.jar" />
