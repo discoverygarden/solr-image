@@ -12,7 +12,7 @@ ARG SOLR_OCRHIGHLIGHTING_VERSION=0.9.4
 USER root
 ENV SOLR_HOCR_PLUGIN_PATH=/opt/solr_extra_lib/ocrhighlighting/lib
 RUN mkdir -p $SOLR_HOCR_PLUGIN_PATH
-ADD --link --chmod=644 https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION-solr78.jar $SOLR_HOCR_PLUGIN_PATH
+ADD --link --chown=0:${SOLR_GID} --chmod=040 https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION-solr78.jar $SOLR_HOCR_PLUGIN_PATH
 USER solr
 
 # https://solr.apache.org/guide/8_9/basic-authentication-plugin.html
