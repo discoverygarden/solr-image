@@ -10,7 +10,7 @@ COPY --link --chown=${SOLR_UID}:${SOLR_GID} islandora8/. ${SOLR_CORE_DIR}
 # renovate: datasource=github-releases depName=dbmdz/solr-ocrhighlighting
 ARG SOLR_OCRHIGHLIGHTING_VERSION=0.9.4
 USER root
-ENV SOLR_HOCR_PLUGIN_PATH=/opt/solr/contrib/ocrhighlighting/lib
+ENV SOLR_HOCR_PLUGIN_PATH=/opt/solr_extra_lib/ocrhighlighting/lib
 RUN mkdir -p $SOLR_HOCR_PLUGIN_PATH
 ADD --link --chmod=644 https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION-solr78.jar $SOLR_HOCR_PLUGIN_PATH
 USER solr
