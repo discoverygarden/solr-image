@@ -218,4 +218,3 @@
   7.0.0
 -->
   <searchComponent name="tvComponent" class="solr.TermVectorComponent"/>
-<lib dir="/var/solr/data/contrib/ocrhighlighting/lib" regex=".*\.jar" />
