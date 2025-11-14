@@ -25,6 +25,7 @@ COPY --link --chown=${SOLR_UID}:${SOLR_GID} \
 WORKDIR /jmx
 ADD --link --chmod=644 https://github.com/prometheus/jmx_exporter/releases/download/1.4.0/jmx_prometheus_javaagent-1.4.0.jar jmx_prometheus_javaagent.jar
 COPY --chmod=644 jmx.yml ./
+ENV SOLR_OPTS="-javaagent:/jmx/jmx_prometheus_javaagent.jar=3001:/jmx/jmx.yml"
 
 WORKDIR /opt/solr
 USER solr
