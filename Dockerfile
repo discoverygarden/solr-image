@@ -22,8 +22,11 @@ COPY --link --chown=${SOLR_UID}:${SOLR_GID} \
   security.json \
   /var/solr/data/security.json
 
+# renovate: datasource=github-releases depName=prometheus/jmx_exporter
+ARG JMX_EXRPORTER_VERSION=1.4.0
 WORKDIR /jmx
-ADD --link --chmod=644 https://github.com/prometheus/jmx_exporter/releases/download/1.4.0/jmx_prometheus_javaagent-1.4.0.jar jmx_prometheus_javaagent.jar
+ADD --link \
+  --chmod=644 https://github.com/prometheus/jmx_exporter/releases/download/$JMX_EXRPORTER_VERSION/jmx_prometheus_javaagent-$JMX_EXRPORTER_VERSION.jar jmx_prometheus_javaagent.jar
 COPY --chmod=644 jmx.yml ./
 ENV SOLR_OPTS="-javaagent:/jmx/jmx_prometheus_javaagent.jar=3001:/jmx/jmx.yml"
 
