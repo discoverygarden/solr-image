@@ -33,6 +33,8 @@ ADD \
   https://github.com/prometheus/jmx_exporter/releases/download/$JMX_EXPORTER_VERSION/jmx_prometheus_javaagent-$JMX_EXPORTER_VERSION.jar jmx_prometheus_javaagent.jar
 COPY --chmod=644 jmx.yml ./
 
+ENV SOLR_OPTS="-javaagent:/jmx/jmx_prometheus_javaagent.jar=3001:/jmx/jmx.yml"
+
 WORKDIR /opt/solr
 USER solr
 VOLUME ["${SOLR_CORE_DIR}/data"]
