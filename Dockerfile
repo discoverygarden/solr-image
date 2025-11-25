@@ -1,5 +1,5 @@
 # https://solr.apache.org/guide/8_9/taking-solr-to-production.html
-FROM solr:8.11.4
+FROM solr:9.10.0
 
 ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 
