@@ -1,18 +1,33 @@
 # https://solr.apache.org/guide/8_9/taking-solr-to-production.html
-FROM solr:8.11.4
+ARG SOLR_VERSION=9.9.0
+FROM solr:$SOLR_VERSION
+ARG SOLR_VERSION
 
 ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 
+# XXX: Suppress security manager, given:
+# - The security manager is slated for removal as of https://openjdk.org/jeps/411
+# - We are missing configuration of the security manager to support our JMX agent
+ENV SOLR_SECURITY_MANAGER_ENABLED="false"
+
 EXPOSE 8983
 
-COPY --link --chown=${SOLR_UID}:${SOLR_GID} islandora8/. ${SOLR_CORE_DIR} 
+COPY --link --chown=${SOLR_UID}:${SOLR_GID} islandora8/. ${SOLR_CORE_DIR}
 
 # renovate: datasource=github-releases depName=dbmdz/solr-ocrhighlighting
 ARG SOLR_OCRHIGHLIGHTING_VERSION=0.9.5
+ARG SOLR_OCRHIGHLIGHTING_CHECKSUM=sha256:0fb598699ed17e9e70cbd2923ee1907595b85068402a39fdd64e06e8b23bd419
 USER root
-ENV SOLR_HOCR_PLUGIN_PATH=/opt/solr_extra_lib/ocrhighlighting/lib
-RUN mkdir -p $SOLR_HOCR_PLUGIN_PATH
-ADD --link --chown=0:${SOLR_GID} --chmod=040 https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION-solr78.jar $SOLR_HOCR_PLUGIN_PATH
+
+ARG SOLR_PATH=/opt/solr-${SOLR_VERSION}
+ENV SOLR_HOCR_PLUGIN_PATH=$SOLR_PATH/lib
+
+# extraction,langid,ltr,analysis-extras are required by search_api_solr, so
+# let's set 'em by default.
+ENV SOLR_MODULES=extraction,langid,ltr,analysis-extras
+ADD --link --chown=0:0 --chmod=444 --checksum=$SOLR_OCRHIGHLIGHTING_CHECKSUM \
+  https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION.jar \
+  $SOLR_HOCR_PLUGIN_PATH/
 USER solr
 
 # https://solr.apache.org/guide/8_9/basic-authentication-plugin.html
