@@ -16,6 +16,7 @@ COPY --link --chown=${SOLR_UID}:${SOLR_GID} islandora8/. ${SOLR_CORE_DIR}
 
 # renovate: datasource=github-releases depName=dbmdz/solr-ocrhighlighting
 ARG SOLR_OCRHIGHLIGHTING_VERSION=0.9.5
+ARG SOLR_OCRHIGHLIGHTING_CHECKSUM=sha256:0fb598699ed17e9e70cbd2923ee1907595b85068402a39fdd64e06e8b23bd419
 USER root
 
 ARG SOLR_PATH=/opt/solr-${SOLR_VERSION}
@@ -24,7 +25,9 @@ ENV SOLR_HOCR_PLUGIN_PATH=$SOLR_PATH/lib
 # extraction,langid,ltr,analysis-extras are required by search_api_solr, so
 # let's set 'em by default.
 ENV SOLR_MODULES=extraction,langid,ltr,analysis-extras
-ADD --link --chown=0:0 --chmod=444 https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION.jar $SOLR_HOCR_PLUGIN_PATH/
+ADD --link --chown=0:0 --chmod=444 --checksum=$SOLR_OCRHIGHLIGHTING_CHECKSUM \
+  https://github.com/dbmdz/solr-ocrhighlighting/releases/download/$SOLR_OCRHIGHLIGHTING_VERSION/solr-ocrhighlighting-$SOLR_OCRHIGHLIGHTING_VERSION.jar \
+  $SOLR_HOCR_PLUGIN_PATH/
 USER solr
 
 # https://solr.apache.org/guide/8_9/basic-authentication-plugin.html
