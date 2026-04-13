@@ -5,6 +5,11 @@ ARG SOLR_VERSION
 
 ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 
+# XXX: Suppress security manager, given:
+# - The security manager is slated for removal as of https://openjdk.org/jeps/411
+# - We are missing configuration of the security manager to support our JMX agent
+ENV SOLR_SECURITY_MANAGER_ENABLED="false"
+
 EXPOSE 8983
 
 COPY --link --chown=${SOLR_UID}:${SOLR_GID} islandora8/. ${SOLR_CORE_DIR}
