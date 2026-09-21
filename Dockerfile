@@ -1,5 +1,5 @@
 # https://solr.apache.org/guide/8_9/taking-solr-to-production.html
-ARG SOLR_VERSION=9.10.1
+ARG SOLR_VERSION=10.0.0
 FROM solr:$SOLR_VERSION
 ARG SOLR_VERSION
 
