@@ -1,5 +1,19 @@
 # https://solr.apache.org/guide/8_9/taking-solr-to-production.html
+
+# XXX: solr:8.11.4 was dropped from the official Docker library (Sep 2025), so its
+# bundled Temurin 11 JRE no longer receives updates. Graft a current Temurin 11 JRE
+# over it. Temurin's Linux builds target an old glibc, so they run fine on focal.
+# renovate: datasource=docker depName=eclipse-temurin
+ARG JRE_IMAGE=eclipse-temurin:11-jre-jammy
+FROM ${JRE_IMAGE} AS jre
+
 FROM solr:8.11.4
+
+USER root
+RUN rm -rf /opt/java/openjdk
+COPY --link --from=jre /opt/java/openjdk /opt/java/openjdk
+RUN java -version
+USER solr
 
 ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 
