@@ -3,6 +3,33 @@ ARG SOLR_VERSION=9.11.0
 FROM solr:$SOLR_VERSION
 ARG SOLR_VERSION
 
+# XXX: Stopgap for Java4Shell (CVE-2026-114938). solr:9.11.0 ships Temurin
+# 17.0.21+9, which is vulnerable, and Temurin has not yet published a fixed
+# 17.0.21.1. Replace the bundled JRE in place with Azul Zulu 17.70.201
+# (OpenJDK 17.0.21.1+2), which carries the fix. Remove this block once the
+# upstream solr image is rebuilt with Temurin >= 17.0.21.1.
+ARG TARGETARCH
+ARG ZULU_JRE_VERSION=17.70.201-ca-jre17.0.21.1
+ARG ZULU_JRE_SHA256_AMD64=1e4637d81dabcca728cf8a2dd94bd081eb232fe941b4773ddddea2893fbd163a
+ARG ZULU_JRE_SHA256_ARM64=03489b3d69690141d61ff848f7be81d0ac7ded5e6648b393a588b00c80769efc
+USER root
+RUN set -eux; \
+  case "$TARGETARCH" in \
+    amd64) arch=x64; sha256=$ZULU_JRE_SHA256_AMD64 ;; \
+    arm64) arch=aarch64; sha256=$ZULU_JRE_SHA256_ARM64 ;; \
+    *) echo "Unsupported arch: $TARGETARCH" >&2; exit 1 ;; \
+  esac; \
+  curl -fsSL -o /tmp/zulu-jre.tar.gz \
+    "https://cdn.azul.com/zulu/bin/zulu${ZULU_JRE_VERSION}-linux_${arch}.tar.gz"; \
+  echo "$sha256  /tmp/zulu-jre.tar.gz" | sha256sum -c -; \
+  rm -rf "$JAVA_HOME"; \
+  mkdir -p "$JAVA_HOME"; \
+  tar -xzf /tmp/zulu-jre.tar.gz -C "$JAVA_HOME" --strip-components=1 --no-same-owner; \
+  rm /tmp/zulu-jre.tar.gz; \
+  java -version
+ENV JAVA_VERSION=zulu-17.0.21.1+2
+USER solr
+
 ENV SOLR_CORE_DIR=${SOLR_HOME}/islandora8
 
 # XXX: Suppress security manager, given:
