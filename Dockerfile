@@ -48,7 +48,9 @@ ADD \
   https://github.com/prometheus/jmx_exporter/releases/download/$JMX_EXPORTER_VERSION/jmx_prometheus_javaagent-$JMX_EXPORTER_VERSION.jar jmx_prometheus_javaagent.jar
 COPY --chmod=644 jmx.yml ./
 
-ENV SOLR_OPTS="-javaagent:/jmx/jmx_prometheus_javaagent.jar=3001:/jmx/jmx.yml"
+# XXX: -XX:-UseBASE64Intrinsics mitigates Java4Shell (CVE-2026-114938) until
+# the base image ships a fixed JDK (Temurin >= 17.0.21.1+2). Safe to drop after.
+ENV SOLR_OPTS="-javaagent:/jmx/jmx_prometheus_javaagent.jar=3001:/jmx/jmx.yml -XX:-UseBASE64Intrinsics"
 
 WORKDIR /opt/solr
 USER solr
