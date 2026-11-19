@@ -53,3 +53,14 @@ ENV SOLR_OPTS="-javaagent:/jmx/jmx_prometheus_javaagent.jar=3001:/jmx/jmx.yml"
 WORKDIR /opt/solr
 USER solr
 VOLUME ["${SOLR_CORE_DIR}/data"]
+
+# --------------------------------------
+# Package manifest: prints every installed package to the build log as
+#   DGI-PKG <arch> <type> <name> <version>
+# so security checks can read versions from the image build's job log.
+# Keep this as the last step of the final stage.
+# --------------------------------------
+RUN a=$(uname -m); \
+  dpkg-query -W -f='${Package} ${Version}\n' | sed "s/^/DGI-PKG $a deb /"; \
+  find / -xdev -name '*.jar' 2>/dev/null | sed "s/^/DGI-PKG $a jar /"; \
+  true
