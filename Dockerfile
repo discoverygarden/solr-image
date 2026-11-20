@@ -15,7 +15,7 @@ EXPOSE 8983
 COPY --link --chown=${SOLR_UID}:${SOLR_GID} islandora8/. ${SOLR_CORE_DIR}
 
 # renovate: datasource=github-releases depName=dbmdz/solr-ocrhighlighting
-ARG SOLR_OCRHIGHLIGHTING_VERSION=0.10.1
+ARG SOLR_OCRHIGHLIGHTING_VERSION=0.11.0
 ARG SOLR_OCRHIGHLIGHTING_CHECKSUM=sha256:d10b86684004ebeec3d938a64608135e80c1cef58a176dacb9a556f0b5a78823
 USER root
 
