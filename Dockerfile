@@ -63,4 +63,6 @@ VOLUME ["${SOLR_CORE_DIR}/data"]
 RUN a=$(uname -m); \
   dpkg-query -W -f='${Package} ${Version}\n' | sed "s/^/DGI-PKG $a deb /"; \
   find / -xdev -name '*.jar' 2>/dev/null | sed "s/^/DGI-PKG $a jar /"; \
+  j=${JAVA_HOME:-$(dirname "$(dirname "$(readlink -f "$(command -v java)")")")}; \
+  [ -f "$j/release" ] && (. "$j/release"; echo "DGI-PKG $a jdk $j ${JAVA_RUNTIME_VERSION:-$JAVA_VERSION} $(echo "${IMPLEMENTOR_VERSION:-$IMPLEMENTOR}" | tr ' ' _)"); \
   true
